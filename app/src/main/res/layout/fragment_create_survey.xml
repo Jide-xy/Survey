@@ -1,0 +1,47 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.babajidemustapha.survey.CreateSurveyFragment"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="@dimen/activity_vertical_margin"
+    >
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Survey Configuration."
+        android:textSize="30sp"
+        android:layout_marginBottom="@dimen/nav_header_height"/>
+    <EditText
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Enter Survey Name"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+    <EditText
+        android:id="@+id/desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:hint="Enter a brief description of the survey"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
+      <Switch
+          android:id="@+id/privacy"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Public"
+          android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
+    <Button
+        android:id="@+id/go"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Continue"
+        android:background="@drawable/custom_button" />
+
+</LinearLayout>

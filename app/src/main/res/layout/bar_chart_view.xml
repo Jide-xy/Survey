@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="6dp">
+
+    <LinearLayout
+        android:orientation="horizontal" android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        >
+    <TextView
+        android:id="@+id/qu_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1222"
+        android:layout_gravity="center"
+        android:layout_marginRight="6dp"/>
+<TextView
+    android:id="@+id/qu_text"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    />
+        </LinearLayout>
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/barChart"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginBottom="6dp"
+        >
+
+    </com.github.mikephil.charting.charts.BarChart>
+    <Button
+        android:id="@+id/btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save Chart"
+        android:layout_gravity="center"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:padding="6dp"
+        android:background="@drawable/custom_button"/>
+</LinearLayout>
