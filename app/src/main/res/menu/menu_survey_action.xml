@@ -3,8 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.babajidemustapha.survey.SurveyAction">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_take_survey"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:title="Take Survey"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_view_report"
+        android:orderInCategory="101"
+        android:title="View Report"
+        app:showAsAction="ifRoom" />
 </menu>

@@ -1,11 +1,7 @@
 package com.example.babajidemustapha.survey;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -21,7 +17,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -32,7 +27,6 @@ import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONStringer;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -63,23 +57,23 @@ public class CreateQuestions extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_questions);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         db = new SurveyDatabase(this);
         Bundle bundle = getIntent().getExtras();
         survey_name = bundle.getString("survey name");
         survey_desc = bundle.getString("survey desc");
         survey_privacy = bundle.getBoolean("survey privacy");
-        addQuestion = (Button) findViewById(R.id.addQuestion);
-        addOption = (Button) findViewById(R.id.addOption);
-        submit = (Button) findViewById(R.id.submit);
-        optionConfig = (LinearLayout) findViewById(R.id.optionConfig);
-        questionsPreview = (LinearLayout) findViewById(R.id.questionsPreview);
-        optionsPreview = (LinearLayout) findViewById(R.id.optionsPreview);
-        quesText = (EditText) findViewById(R.id.questionText);
-        optText = (EditText) findViewById(R.id.optionText);
-        quesType = (Spinner) findViewById(R.id.questionType);
-        mandatory = (Switch) findViewById(R.id.mandatory);
+        addQuestion = findViewById(R.id.addQuestion);
+        addOption = findViewById(R.id.addOption);
+        //  submit = (Button) findViewById(R.id.submit);
+        optionConfig = findViewById(R.id.optionConfig);
+        questionsPreview = findViewById(R.id.questionsPreview);
+        optionsPreview = findViewById(R.id.optionsPreview);
+        quesText = findViewById(R.id.questionText);
+        optText = findViewById(R.id.optionText);
+        quesType = findViewById(R.id.questionType);
+        mandatory = findViewById(R.id.mandatory);
         questions = new ArrayList<>();
         options = new ArrayList<>();
         addQuestion.setOnClickListener(new View.OnClickListener() {
@@ -154,25 +148,25 @@ public class CreateQuestions extends AppCompatActivity {
                 quesText.setEnabled(false);
             }
         });
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(questions.size() == 0){
-                    Toast.makeText(CreateQuestions.this,"You must add at least one question",Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    Survey survey = new Survey();
-                    survey.setName(survey_name);
-                    survey.setDesc(survey_desc);
-                    survey.setUsername("");
-                    survey.setPrivacy(survey_privacy);
-                    survey.setDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-                    db.createSurvey(survey,questions);
-                    Toast.makeText(CreateQuestions.this,"Your Survey has been recorded",Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-            }
-        });
+//        submit.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(questions.size() == 0){
+//                    Toast.makeText(CreateQuestions.this,"You must add at least one question",Toast.LENGTH_SHORT).show();
+//                }
+//                else {
+//                    Survey survey = new Survey();
+//                    survey.setName(survey_name);
+//                    survey.setDesc(survey_desc);
+//                    survey.setUsername("");
+//                    survey.setPrivacy(survey_privacy);
+//                    survey.setDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+//                    db.createSurvey(survey,questions);
+//                    Toast.makeText(CreateQuestions.this,"Your Survey has been recorded",Toast.LENGTH_SHORT).show();
+//                    finish();
+//                }
+//            }
+//        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
     public void tryAddQuestion(){
@@ -343,7 +337,7 @@ public class CreateQuestions extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.question_menu, menu);
         return true;
     }
 
@@ -353,6 +347,19 @@ public class CreateQuestions extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.save) {
+            if (questions.size() == 0) {
+                Toast.makeText(CreateQuestions.this, "You must add at least one question", Toast.LENGTH_SHORT).show();
+            } else {
+                Survey survey = new Survey();
+                survey.setName(survey_name);
+                survey.setDesc(survey_desc);
+                survey.setUsername("");
+                survey.setPrivacy(survey_privacy);
+                survey.setDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                db.createSurvey(survey, questions);
+                Toast.makeText(CreateQuestions.this, "Your Survey has been recorded", Toast.LENGTH_SHORT).show();
+                finish();
+            }
             return true;
         }
 

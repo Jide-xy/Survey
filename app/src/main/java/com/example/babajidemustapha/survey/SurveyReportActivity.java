@@ -1,23 +1,15 @@
 package com.example.babajidemustapha.survey;
 
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,22 +43,27 @@ public class SurveyReportActivity extends AppCompatActivity {
         survey_id = bundle.getInt("ID");
         survey_name = bundle.getString("name");
         db = new SurveyDatabase(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(survey_name.length()>15? survey_name.substring(0,12)+"..." : survey_name);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mSectionsPagerAdapter.addFragment(new ResponseList(), "Responses");
         mSectionsPagerAdapter.addFragment(new TableFragment(), "Table");
         mSectionsPagerAdapter.addFragment(new BarChartFragment(), "Bar Chart");
         mSectionsPagerAdapter.addFragment(new PieChartFragment(), "Pie Chart");
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        mViewPager = findViewById(R.id.container);
+        tabLayout = findViewById(R.id.tabs);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         tabLayout.setupWithViewPager(mViewPager);
+
+        if (bundle.getBoolean("from_notification")) {
+            mViewPager.setCurrentItem(1, true);
+        }
 
 
     }

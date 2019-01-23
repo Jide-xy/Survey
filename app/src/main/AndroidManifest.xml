@@ -84,6 +84,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.babajidemustapha.survey.MainActivity" />
         </activity>
+        <activity
+            android:name=".NewSurveyActivity"
+            android:label="@string/title_activity_new_survey"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.babajidemustapha.survey.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

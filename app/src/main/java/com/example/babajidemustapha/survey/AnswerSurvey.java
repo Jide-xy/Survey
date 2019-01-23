@@ -11,6 +11,9 @@ import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -48,6 +51,7 @@ public class AnswerSurvey extends Fragment {
     Button btn;
     EditText name;
     int survey_id;
+    String survey_name;
     boolean online;
     RequestQueue requestQueue;
     String device_token;
@@ -60,45 +64,49 @@ public class AnswerSurvey extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.content_take_survey,container,false);
+        setHasOptionsMenu(true);
         Bundle bundle = getActivity().getIntent().getExtras();
         survey_id = bundle.getInt("ID");
+        survey_name = bundle.getString("name");
         online = bundle.getBoolean("online");
         requestQueue = Volley.newRequestQueue(getContext());
         Log.e("id",survey_id +"");
-        rootView = (LinearLayout) view.findViewById(R.id.rootView);
-        name = (EditText) view.findViewById(R.id.respondentName);
-        btn= (Button) view.findViewById(R.id.submitResponse);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.setEnabled(false);
-//                if(name.getText().toString().isEmpty()){
-//                    Toast.makeText(getContext(),"Please enter your name",Toast.LENGTH_SHORT).show();
-//                }
-//                else {
-                    if (validate(questions)) {
-                        if(!online) {
-                            submit();
-                            Toast.makeText(getContext(), "Your response has been recorded", Toast.LENGTH_SHORT).show();
-                            getActivity().finish();
-                        }
-                        else{
-                            saveOnlineResponse(questions);
-                        }
-                    } else {
-                        Toast.makeText(getContext(), "1 or more mandatory questions have not been answered", Toast.LENGTH_SHORT).show();
-                    }
-             //   }
-                v.setEnabled(true);
-            }
-        });
+        rootView = view.findViewById(R.id.rootView);
+        name = view.findViewById(R.id.respondentName);
+        // btn= (Button) view.findViewById(R.id.submitResponse);
+//        btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                v.setEnabled(false);
+////                if(name.getText().toString().isEmpty()){
+////                    Toast.makeText(getContext(),"Please enter your name",Toast.LENGTH_SHORT).show();
+////                }
+////                else {
+//                    if (validate(questions)) {
+//                        if(!online) {
+//                            submit();
+//                            Toast.makeText(getContext(), "Your response has been recorded", Toast.LENGTH_SHORT).show();
+//                            getActivity().finish();
+//                        }
+//                        else{
+//                            saveOnlineResponse(questions);
+//                        }
+//                    } else {
+//                        Toast.makeText(getContext(), "1 or more mandatory questions have not been answered", Toast.LENGTH_SHORT).show();
+//                    }
+//             //   }
+//                v.setEnabled(true);
+//            }
+//        });
         if(!online) {
             db = new SurveyDatabase(getContext());
             questions = db.getQuestions(survey_id);
+            getActivity().setTitle(survey_name.length() <= 10 ? survey_name : survey_name.substring(0, 7) + "...");
         }
         else {
             device_token = bundle.getString("device_token");
             questions = (ArrayList<Question>) bundle.getSerializable("questions");
+            getActivity().setTitle(survey_name.length() <= 10 ? survey_name : survey_name.substring(0, 7) + "...");
         }
         Log.e("id",questions.toString());
         buildQuestions(questions,rootView);
@@ -119,13 +127,13 @@ public class AnswerSurvey extends Fragment {
             if (questions.get(i).isMandatory()) {
                 switch (questions.get(i).getQuestionType()) {
                     case "TEXT":
-                        EditText ans = (EditText) rootView.findViewWithTag(questions.get(i).getQuestionNo());
+                        EditText ans = rootView.findViewWithTag(questions.get(i).getQuestionNo());
                         if (ans.getText().toString().isEmpty()){
                             return false;
                         }
                         break;
                     case "SINGLE":
-                        RadioGroup radioGroup = (RadioGroup) rootView.findViewWithTag("rg"+ questions.get(i).getQuestionNo());
+                        RadioGroup radioGroup = rootView.findViewWithTag("rg" + questions.get(i).getQuestionNo());
                         if(radioGroup.getCheckedRadioButtonId() == -1){
                             return false;
                         }
@@ -133,7 +141,7 @@ public class AnswerSurvey extends Fragment {
                     case "MULTI":
                         Question question = questions.get(i);
                         for(int j = 0 ; j < question.getOptionCount(); j++ ){
-                            CheckBox cb = (CheckBox) rootView.findViewWithTag("qu"+ question.getQuestionNo()+"op"+ j);
+                            CheckBox cb = rootView.findViewWithTag("qu" + question.getQuestionNo() + "op" + j);
                             if(cb.isChecked()){
                                 return true;
                             }
@@ -150,7 +158,7 @@ public class AnswerSurvey extends Fragment {
             Question question = questions.get(i);
             switch (question.getQuestionType()) {
                 case "TEXT":
-                    EditText ans = (EditText) rootView.findViewWithTag(question.getQuestionNo());
+                    EditText ans = rootView.findViewWithTag(question.getQuestionNo());
                     if (!ans.getText().toString().isEmpty()){
                         // question.setAnswer(ans.getText().toString());
                         responses.add(new Response(question.getId(),ans.getText().toString()));
@@ -160,9 +168,9 @@ public class AnswerSurvey extends Fragment {
                     }
                     break;
                 case "SINGLE":
-                    RadioGroup radioGroup = (RadioGroup) rootView.findViewWithTag("rg"+question.getQuestionNo());
+                    RadioGroup radioGroup = rootView.findViewWithTag("rg" + question.getQuestionNo());
                     if(radioGroup.getCheckedRadioButtonId() != -1){
-                        RadioButton radioButton = (RadioButton) rootView.findViewById(radioGroup.getCheckedRadioButtonId());
+                        RadioButton radioButton = rootView.findViewById(radioGroup.getCheckedRadioButtonId());
                         responses.add(new Response(question.getId(),radioButton.getText().toString()));
                         // question.setAnswer(radioButton.getText().toString());
                     }
@@ -173,7 +181,7 @@ public class AnswerSurvey extends Fragment {
                 case "MULTI":
                     List<String> cbList = new ArrayList<>();
                     for(int j = 0 ; j < question.getOptionCount(); j++ ){
-                        CheckBox cb = (CheckBox) rootView.findViewWithTag("qu"+ question.getQuestionNo()+"op"+ j);
+                        CheckBox cb = rootView.findViewWithTag("qu" + question.getQuestionNo() + "op" + j);
                         if(cb.isChecked()){
                             cbList.add("\""+cb.getText().toString()+"\"");
                         }
@@ -344,4 +352,28 @@ public class AnswerSurvey extends Fragment {
         return cardView;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.save_answers) {
+            if (validate(questions)) {
+                if (!online) {
+                    submit();
+                    Toast.makeText(getContext(), "Your response has been recorded", Toast.LENGTH_SHORT).show();
+                    getActivity().finish();
+                } else {
+                    saveOnlineResponse(questions);
+                }
+            } else {
+                Toast.makeText(getContext(), "1 or more mandatory questions have not been answered", Toast.LENGTH_SHORT).show();
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.take_survey_menu, menu);
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 }

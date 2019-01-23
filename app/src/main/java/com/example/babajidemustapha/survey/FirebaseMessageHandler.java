@@ -2,16 +2,14 @@ package com.example.babajidemustapha.survey;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
-import com.android.volley.*;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -57,18 +55,19 @@ public class FirebaseMessageHandler extends FirebaseMessagingService {
                     Log.e("ddd",response.toString());
                     try {
                         if(response.getString("STATUS").equalsIgnoreCase("success")){
-                           db.saveResponse(response.getJSONArray("RESPONSES"));
+                            long response_id = db.saveResponse(response.getJSONArray("RESPONSES"));
                             db.saveResponseDetail(response.getJSONArray("RESPONSE_DETAILS"));
-                            Intent intent = new Intent(FirebaseMessageHandler.this, SurveyAction.class);
+                            Intent intent = new Intent(FirebaseMessageHandler.this, ResponseDetail.class);
                             Log.e(TAG,"online id: "+response.getJSONArray("RESPONSES").getJSONObject(0).getInt("SURVEY_ID"));
                             Survey survey = db.getSurvey(response.getJSONArray("RESPONSES").getJSONObject(0).getInt("SURVEY_ID"));
                            // Log.e(TAG,"offline id: "+db.getSurvey(response.getJSONArray("RESPONSES").getJSONObject(0).getInt("SURVEY_ID")));
-                            intent.putExtra("name",survey.getName());
-                            intent.putExtra("ID",survey.getId());
-                            intent.putExtra("Description",survey.getDesc());
-                            intent.putExtra("quesNo",survey.getNoOfQues());
-                            intent.putExtra("online", false);
-                            intent.putExtra("from_notification", true);
+                            intent.putExtra("ID", response_id);
+//                            intent.putExtra("name",survey.getName());
+//                            intent.putExtra("Description",survey.getDesc());
+//                            intent.putExtra("quesNo",survey.getNoOfQues());
+//                            intent.putExtra("online", false);
+//                            intent.putExtra("from_notification", true);
+//                            intent.putExtra("response_id", response_id);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             PendingIntent pendingIntent = PendingIntent.getActivity(FirebaseMessageHandler.this, 1410,
                                     intent, PendingIntent.FLAG_ONE_SHOT);

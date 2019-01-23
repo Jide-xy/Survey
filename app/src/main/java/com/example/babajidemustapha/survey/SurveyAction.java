@@ -1,34 +1,24 @@
 package com.example.babajidemustapha.survey;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.BackgroundColorSpan;
-import android.text.style.ForegroundColorSpan;
 import android.text.style.ReplacementSpan;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -61,15 +51,15 @@ public class SurveyAction extends AppCompatActivity {
         setContentView(R.layout.activity_survey_action);
         Bundle bundle = getIntent().getExtras();
         online = bundle.getBoolean("online");
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         mSectionsPagerAdapter.addFragment(new SurveyDescription(), "Description");
         mSectionsPagerAdapter.addFragment(new AnswerSurvey(), "Take Survey");
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        mViewPager = findViewById(R.id.container);
+        tabLayout = findViewById(R.id.tabs);
         if(!online) {
             survey_id = bundle.getInt("ID");
 
@@ -77,16 +67,16 @@ public class SurveyAction extends AppCompatActivity {
             // primary sections of the activity.
             db = new SurveyDatabase(this);
 
-            mSectionsPagerAdapter.addFragment(new ResponseList(), "Responses");
+            // mSectionsPagerAdapter.addFragment(new ResponseList(), "Responses");
             // Set up the ViewPager with the sections adapter.
 
             mViewPager.setAdapter(mSectionsPagerAdapter);
 
             tabLayout.setupWithViewPager(mViewPager);
 //            setupTabs();
-            if(bundle.getBoolean("from_notification")){
-                mViewPager.setCurrentItem(2,true);
-            }
+//            if(bundle.getBoolean("from_notification")){
+//                mViewPager.setCurrentItem(2,true);
+//            }
         }
         else{
             setTitle("External Survey");
@@ -108,8 +98,8 @@ public class SurveyAction extends AppCompatActivity {
 //                    customText.setSpan(new ForegroundColorSpan(0xFF000000) , 10, customText.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     customText.setSpan(new RoundedBackgroundSpan(this) , 10, customText.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     View view = getLayoutInflater().inflate(R.layout.tab_layout_with_badge,null);
-                    TextView textView = (TextView) view.findViewById(R.id.tabText);
-                    TextView textView2 = (TextView) view.findViewById(R.id.tabBadge);
+                    TextView textView = view.findViewById(R.id.tabText);
+                    TextView textView2 = view.findViewById(R.id.tabBadge);
                     textView.setText("RESPONSES");
                     textView2.setText(db.getResponsesCount(survey_id)+"");
 //                    textView.setTextColor(new ColorStateList(new int[][]{

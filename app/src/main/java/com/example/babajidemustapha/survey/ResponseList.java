@@ -16,13 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-
 
 
 /**
@@ -76,11 +72,16 @@ public class ResponseList extends Fragment {
         Bundle bundle = getActivity().getIntent().getExtras();
         survey_id = bundle.getInt("ID");
         Log.e("survey_id", survey_id+"");
-        recyclerView = (RecyclerView) view.findViewById(R.id.responseList);
-        placeholder = (TextView) view.findViewById(R.id.emptyPlaceholder);
+        recyclerView = view.findViewById(R.id.responseList);
+        placeholder = view.findViewById(R.id.emptyPlaceholder);
         responses= new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        loadResponses();;
+        loadResponses();
+//        if(bundle.getBoolean("from_notification")){
+//            long response_id = bundle.getLong("response_id");
+//           recyclerView.getLayoutManager().scrollToPosition(3);
+//          // adapter1.
+//        }
         return view;
     }
 
@@ -139,9 +140,9 @@ public class ResponseList extends Fragment {
 
             private ViewHolder(View itemView) {
                 super(itemView);
-                name = (TextView) itemView.findViewById(R.id.response_name);
-                date = (TextView) itemView.findViewById(R.id.response_date);
-                time = (TextView) itemView.findViewById(R.id.response_time);
+                name = itemView.findViewById(R.id.response_name);
+                date = itemView.findViewById(R.id.response_date);
+                time = itemView.findViewById(R.id.response_time);
                 itemView.setOnClickListener(this);
             }
 

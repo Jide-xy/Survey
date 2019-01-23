@@ -5,23 +5,23 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.*;
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
@@ -42,37 +42,38 @@ public class MainActivity extends AppCompatActivity
     TextView email;
     ProgressDialog progressDialog;
     FrameLayout framelayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        framelayout = (FrameLayout) findViewById(R.id.container);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        framelayout = findViewById(R.id.container);
         setSupportActionBar(toolbar);
-        user_data = getSharedPreferences("user_data",MODE_PRIVATE);
-        toolbar.setTitle("My Surveys");
+        user_data = getSharedPreferences("user_data", MODE_PRIVATE);
+        //toolbar.setTitle("My Surveys");
         db = new SurveyDatabase(this);
-         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.container, new SurveyList())
-                    .commit();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, new SurveyList())
+                .commit();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        username = (TextView) navigationView.getHeaderView(0).findViewById(R.id.username);
-        email = (TextView) navigationView.getHeaderView(0).findViewById(R.id.email);
-        username.setText(user_data.getString("USERNAME",null));
-       email.setText(user_data.getString("EMAIL",null));
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        username = navigationView.getHeaderView(0).findViewById(R.id.username);
+        email = navigationView.getHeaderView(0).findViewById(R.id.email);
+        username.setText(user_data.getString("USERNAME", null));
+        email.setText(user_data.getString("EMAIL", null));
         navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -102,7 +103,7 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    public void trySync(){
+    public void trySync() {
         progressDialog = new ProgressDialog(this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Syncing survey. Please wait...");
@@ -115,10 +116,9 @@ public class MainActivity extends AppCompatActivity
             jsonObject.put("USER_ID", user_data.getInt("USER_ID", 0));
             printlog(jsonObject);
             if (jsonObject.optJSONArray("SURVEYS").length() == 0 && jsonObject.optJSONArray("SYNCED_SURVEY_RESPONSE").length() == 0) {
-               progressDialog.dismiss();
+                progressDialog.dismiss();
                 Snackbar.make(framelayout, "Backup up to date", Snackbar.LENGTH_SHORT).show();
-            }
-            else {
+            } else {
                 syncRequest = new JsonObjectRequest(Request.Method.POST, "http://survhey.azurewebsites.net/survey/sync", jsonObject, new com.android.volley.Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response_) {
@@ -177,25 +177,26 @@ public class MainActivity extends AppCompatActivity
 //            });
 
             }
-        }catch(JSONException e){
-                e.printStackTrace();
-            }
-            if (syncRequest != null) {
-                Volley.newRequestQueue(MainActivity.this).add(syncRequest);
-            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if (syncRequest != null) {
+            Volley.newRequestQueue(MainActivity.this).add(syncRequest);
+        }
 
     }
 
-    public void printlog(JSONObject jsonObject){
+    public void printlog(JSONObject jsonObject) {
         String veryLongString = jsonObject.toString();
         int maxLogSize = 200;
-        for(int i = 0; i <= veryLongString.length() / maxLogSize; i++) {
+        for (int i = 0; i <= veryLongString.length() / maxLogSize; i++) {
             int start = i * maxLogSize;
-            int end = (i+1) * maxLogSize;
+            int end = (i + 1) * maxLogSize;
             end = end > veryLongString.length() ? veryLongString.length() : end;
             Log.v("json", veryLongString.substring(start, end));
         }
     }
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         Fragment fragment = null;
@@ -204,34 +205,35 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.survey) {
             fragment = new SurveyList();
-        } else if (id == R.id.create) {
-            fragment = new CreateSurveyFragment();
         }
-        else if (id == R.id.report) {
-            fragment = new ReportFragment();
-        }
-         else if (id == R.id.sync) {
+// else if (id == R.id.create) {
+//            fragment = new CreateSurveyFragment();
+//        }
+//        else if (id == R.id.report) {
+//            fragment = new ReportFragment();
+//        }
+        else if (id == R.id.sync) {
             trySync();
-        }  else if (id == R.id.logout) {
-            String user_token = user_data.getString("DEVICE_TOKEN",null);
+        } else if (id == R.id.logout) {
+            String user_token = user_data.getString("DEVICE_TOKEN", null);
             SharedPreferences.Editor editor = user_data.edit();
             db.deleteDB();
             editor.clear().commit();
-            editor.putString("DEVICE_TOKEN",user_token).commit();
+            editor.putString("DEVICE_TOKEN", user_token).commit();
             Intent intent = new Intent(this, LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();
-        }
-        else if(id == R.id.search){
+        } else if (id == R.id.search) {
             fragment = new SearchSurvey();
         }
-        if(fragment!=null) {
+        if (fragment != null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
     private void handleIntent(Intent intent) {
 
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {

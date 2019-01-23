@@ -12,7 +12,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -112,9 +111,10 @@ public class SurveyDatabase extends SQLiteOpenHelper {
         }
         db.close();
     }
-    public void saveResponse(JSONArray response) throws JSONException {
-        SQLiteDatabase db = this.getWritableDatabase();
 
+    public long saveResponse(JSONArray response) throws JSONException {
+        SQLiteDatabase db = this.getWritableDatabase();
+        long response_id = -1;
         for(int i=0 ; i<response.length(); i++){
             ContentValues values = new ContentValues();
             JSONObject object = response.getJSONObject(i);
@@ -127,10 +127,11 @@ public class SurveyDatabase extends SQLiteOpenHelper {
             values.put("RESPONDENT_NAME",object.getString("RESPONDENT_NAME"));
             values.put("RESPONSE_DATE",object.getString("RESPONSE_DATE"));
             values.put("SYNCED",1);
-            db.insert("RESPONSE",null,values);
+            response_id = db.insert("RESPONSE", null, values);
             cursor.close();
         }
         db.close();
+        return response_id;
     }
     public void saveResponseDetail(JSONArray resDetail) throws JSONException {
         SQLiteDatabase db = this.getWritableDatabase();

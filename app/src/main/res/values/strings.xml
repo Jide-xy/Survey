@@ -41,4 +41,5 @@
     <string name="title_activity_table">TableActivity</string>
     <string name="title_activity_bar_chart">BarChartActivity</string>
     <string name="title_activity_survey_report">SurveyReportActivity</string>
+    <string name="title_activity_new_survey">New Survey</string>
 </resources>
