@@ -17,7 +17,8 @@
         android:gravity="center"
         android:visibility="gone"
         />
-    <android.support.v7.widget.RecyclerView
+
+    <androidx.recyclerview.widget.RecyclerView
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:id="@+id/responseList"

@@ -1,11 +1,8 @@
 package com.example.babajidemustapha.survey;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +20,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class SignUpActivity extends AppCompatActivity {
     JsonObjectRequest request;
@@ -42,14 +41,14 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        username = (EditText) findViewById(R.id.cUsername);
-        password = (EditText) findViewById(R.id.cPassword);
-        password2 = (EditText) findViewById(R.id.cPassword2);
-        email = (EditText) findViewById(R.id.cEmail);
-        phone = (EditText) findViewById(R.id.cPhone);
-        fname = (EditText) findViewById(R.id.cFirstName);
-        lname = (EditText) findViewById(R.id.cSurname);
-        button = (Button) findViewById(R.id.create);
+        username = findViewById(R.id.cUsername);
+        password = findViewById(R.id.cPassword);
+        password2 = findViewById(R.id.cPassword2);
+        email = findViewById(R.id.cEmail);
+        phone = findViewById(R.id.cPhone);
+        fname = findViewById(R.id.cFirstName);
+        lname = findViewById(R.id.cSurname);
+        button = findViewById(R.id.create);
         progressDialog = new ProgressDialog(this);
         loginData = getSharedPreferences("user_data",MODE_PRIVATE);
     }
@@ -159,8 +158,8 @@ public class SignUpActivity extends AppCompatActivity {
         return isValid;
     }
     private JSONObject buildJson() throws JSONException{
-        JSONObject obj = new JSONObject();;
-            obj.put("username",username.getText().toString());
+        JSONObject obj = new JSONObject();
+        obj.put("username", username.getText().toString());
             obj.put("password",Sha1.getHash(password.getText().toString()));
             obj.put("surname",lname.getText().toString());
             obj.put("firstname",fname.getText().toString());

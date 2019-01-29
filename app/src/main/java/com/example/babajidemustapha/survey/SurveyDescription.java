@@ -2,11 +2,12 @@ package com.example.babajidemustapha.survey;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,9 +31,9 @@ public class SurveyDescription extends Fragment {
                              Bundle savedInstanceState) {
        View view =  inflater.inflate(R.layout.content_survey_description,container,false);
         Bundle bundle = getActivity().getIntent().getExtras();
-        TextView txtName = (TextView) view.findViewById(R.id.name);
-        TextView txtDesc = (TextView) view.findViewById(R.id.desc);
-        TextView txtQues = (TextView) view.findViewById(R.id.ques);
+        TextView txtName = view.findViewById(R.id.name);
+        TextView txtDesc = view.findViewById(R.id.desc);
+        TextView txtQues = view.findViewById(R.id.ques);
         survey_id = bundle.getInt("ID");
         online = bundle.getBoolean("online");
         db = new SurveyDatabase(getContext());
@@ -43,7 +44,7 @@ public class SurveyDescription extends Fragment {
         txtDesc.setText(desc);
         txtQues.setText(quesNo + " question(s)");
         if(online){
-            TextView username = (TextView) view.findViewById(R.id.username);
+            TextView username = view.findViewById(R.id.username);
             username.setText("Survey By: @"+bundle.getString("Username"));
             username.setVisibility(View.VISIBLE);
         }

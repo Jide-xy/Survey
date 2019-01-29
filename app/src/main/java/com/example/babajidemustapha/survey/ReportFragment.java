@@ -1,14 +1,8 @@
 package com.example.babajidemustapha.survey;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,12 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.babajidemustapha.survey.R;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuItemCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,12 +43,12 @@ public class ReportFragment extends Fragment {
         db = new SurveyDatabase(getContext());
         getActivity().setTitle("Reports");
         View view = inflater.inflate(R.layout.fragment_survey_list, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.surveyList);
-        placeholder = (TextView) view.findViewById(R.id.emptyPlaceholder);
+    recyclerView = view.findViewById(R.id.surveyList);
+    placeholder = view.findViewById(R.id.emptyPlaceholder);
         surveys= new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        loadSurveys();;
-        setHasOptionsMenu(true);
+    loadSurveys();
+    setHasOptionsMenu(true);
         return view;
     }
     public void loadSurveys(){
@@ -115,11 +113,11 @@ public class ReportFragment extends Fragment {
 
             private ViewHolder(View itemView) {
                 super(itemView);
-                name = (TextView) itemView.findViewById(R.id.name);
-                desc = (TextView) itemView.findViewById(R.id.desc);
-                date = (TextView) itemView.findViewById(R.id.date);
+                name = itemView.findViewById(R.id.name);
+                desc = itemView.findViewById(R.id.desc);
+                date = itemView.findViewById(R.id.date);
                 //     no_of_ques = (TextView) itemView.findViewById(R.id.no_of_questions);
-                privacy = (TextView) itemView.findViewById(R.id.privacy);
+                privacy = itemView.findViewById(R.id.privacy);
                 itemView.setOnClickListener(this);
             }
 

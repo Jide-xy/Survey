@@ -1,16 +1,10 @@
 package com.example.babajidemustapha.survey;
 
 
-import android.*;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +30,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 /**
@@ -67,7 +67,7 @@ public class PieChartFragment extends Fragment {
         xyCoord = new LinkedHashMap<>();
         Map<Question,List<Response>> reports = db.getReport(survey_id);
         buildXYcoord(reports);
-        recyclerView = (RecyclerView) view.findViewById(R.id.pieList);
+        recyclerView = view.findViewById(R.id.pieList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(new CustomAdapter1(questions));
         return view;
@@ -224,15 +224,15 @@ public class PieChartFragment extends Fragment {
 
             private ViewHolder(View itemView) {
                 super(itemView);
-                qu_no = (TextView) itemView.findViewById(R.id.qu_no);
-                qu_text = (TextView) itemView.findViewById(R.id.qu_text);
-                pieChart = (PieChart) itemView.findViewById(R.id.pieChart);
-                btn = (Button) itemView.findViewById(R.id.btn);
+                qu_no = itemView.findViewById(R.id.qu_no);
+                qu_text = itemView.findViewById(R.id.qu_text);
+                pieChart = itemView.findViewById(R.id.pieChart);
+                btn = itemView.findViewById(R.id.btn);
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         View view1 =  recyclerView.findViewHolderForAdapterPosition(getAdapterPosition()).itemView;
-                         pieChart1 = (PieChart)  view1.findViewById(R.id.pieChart);
+                        pieChart1 = view1.findViewById(R.id.pieChart);
                         checkFilePermissionAndSave();
                     }
                 });

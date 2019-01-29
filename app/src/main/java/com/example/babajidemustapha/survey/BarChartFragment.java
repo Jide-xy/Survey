@@ -1,18 +1,10 @@
 package com.example.babajidemustapha.survey;
 
 
-import android.*;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +15,6 @@ import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -40,15 +31,19 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -78,7 +73,7 @@ public class BarChartFragment extends Fragment {
         xyCoord = new LinkedHashMap<>();
         Map<Question,List<Response>> reports = db.getReport(survey_id);
         buildXYcoord(reports);
-        recyclerView = (RecyclerView) view.findViewById(R.id.barList);
+        recyclerView = view.findViewById(R.id.barList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(new CustomAdapter1(questions));
         return view;
@@ -183,7 +178,7 @@ public class BarChartFragment extends Fragment {
                             Random rnd = new Random();
                             int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
                             colors.add(color);
-                            labels[((int) (i))] = (String) entry.getKey();
+                            labels[i] = (String) entry.getKey();
                             i += 1;
                             if((int)entry.getValue()>0){
                                 noData = false;
@@ -242,15 +237,15 @@ public class BarChartFragment extends Fragment {
 
             private ViewHolder(View itemView) {
                 super(itemView);
-                qu_no = (TextView) itemView.findViewById(R.id.qu_no);
-                qu_text = (TextView) itemView.findViewById(R.id.qu_text);
-                barChart = (BarChart) itemView.findViewById(R.id.barChart);
-                btn = (Button) itemView.findViewById(R.id.btn);
+                qu_no = itemView.findViewById(R.id.qu_no);
+                qu_text = itemView.findViewById(R.id.qu_text);
+                barChart = itemView.findViewById(R.id.barChart);
+                btn = itemView.findViewById(R.id.btn);
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         View view1 =  recyclerView.findViewHolderForAdapterPosition(getAdapterPosition()).itemView;
-                         barChart1 = (BarChart)  view1.findViewById(R.id.barChart);
+                        barChart1 = view1.findViewById(R.id.barChart);
                         checkFilePermissionAndSave();
                     }
                 });
@@ -292,7 +287,7 @@ public class BarChartFragment extends Fragment {
 
         public MyMarkerView(Context context, int layoutResource, String[] labels) {
             super(context, layoutResource);
-            tvContent = (TextView) findViewById(R.id.marker);
+            tvContent = findViewById(R.id.marker);
          //   tvContent = (TextView) getActivity().getLayoutInflater().inflate(layoutResource,null).findViewById(R.id.marker);
             this.labels = labels;
             // find your layout components

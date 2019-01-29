@@ -3,7 +3,6 @@ package com.example.babajidemustapha.survey;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
-import android.widget.ToggleButton;
+
+import androidx.fragment.app.Fragment;
 
 
 /**
@@ -70,10 +70,10 @@ public class CreateSurveyFragment extends Fragment {
         // Inflate the layout for this fragment
         View layout = inflater.inflate(R.layout.fragment_create_survey, container, false);
         getActivity().setTitle("Survey Configuration");
-        name = (EditText) layout.findViewById(R.id.name);
-        desc = (EditText) layout.findViewById(R.id.desc);
-        privacy = (Switch) layout.findViewById(R.id.privacy);
-        btn = (Button) layout.findViewById(R.id.go);
+        name = layout.findViewById(R.id.name);
+        desc = layout.findViewById(R.id.desc);
+        privacy = layout.findViewById(R.id.privacy);
+        btn = layout.findViewById(R.id.go);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

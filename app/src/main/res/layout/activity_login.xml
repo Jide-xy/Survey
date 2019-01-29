@@ -31,7 +31,8 @@
                     android:src="@drawable/logo"
                     android:scaleType="fitCenter"
                     android:layout_marginBottom="40dp"/>
-            <android.support.design.widget.TextInputLayout
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/activity_horizontal_margin"
@@ -44,9 +45,9 @@
                     android:inputType="text"
                     android:maxLines="1"
                     />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/passwordVisible"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -61,7 +62,7 @@
                     android:maxLines="1"
                    />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
             <ProgressBar
                 android:id="@+id/login_progress"
                 style="?android:attr/progressBarStyleLargeInverse"

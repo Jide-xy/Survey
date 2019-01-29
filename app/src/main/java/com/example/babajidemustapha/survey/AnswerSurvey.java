@@ -3,8 +3,6 @@ package com.example.babajidemustapha.survey;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -39,6 +37,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 
 /**
  * A simple {@link Fragment} subclass.

@@ -1,7 +1,6 @@
 package com.example.babajidemustapha.survey;
 
 
-import android.*;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -9,11 +8,6 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +29,12 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 /**
@@ -69,7 +68,7 @@ public class TableFragment extends Fragment {
         xyCoord = new LinkedHashMap<>();
         Map<Question,List<Response>> reports = db.getReport(survey_id);
         buildXYcoord(reports);
-        recyclerView = (RecyclerView) view.findViewById(R.id.tableList);
+        recyclerView = view.findViewById(R.id.tableList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(new CustomAdapter1(questions));
         return view;
@@ -145,8 +144,8 @@ public class TableFragment extends Fragment {
             }
             for (Map.Entry entry: xyCoord.get(source.get(position)).entrySet()) {
                 TableRow tableRow = (TableRow) inflater.inflate(R.layout.table_row_view,null);
-                TextView response = (TextView) tableRow.findViewById(R.id.response);
-                TextView count = (TextView) tableRow.findViewById(R.id.count);
+                TextView response = tableRow.findViewById(R.id.response);
+                TextView count = tableRow.findViewById(R.id.count);
                 response.setText((String) entry.getKey());
                 count.setText((int) entry.getValue()+"");
                 tableRow.setBackgroundColor(i%2==0?0xFFE0E0E0:0xFFFFFFFF);
@@ -171,11 +170,11 @@ public class TableFragment extends Fragment {
 
             private ViewHolder(View itemView) {
                 super(itemView);
-                qu_no = (TextView) itemView.findViewById(R.id.qu_no);
-                qu_text = (TextView) itemView.findViewById(R.id.qu_text);
-                no_data = (TextView) itemView.findViewById(R.id.nodata);
-                tableLayout1 = (TableLayout) itemView.findViewById(R.id.table);
-                btn = (Button) itemView.findViewById(R.id.btn);
+                qu_no = itemView.findViewById(R.id.qu_no);
+                qu_text = itemView.findViewById(R.id.qu_text);
+                no_data = itemView.findViewById(R.id.nodata);
+                tableLayout1 = itemView.findViewById(R.id.table);
+                btn = itemView.findViewById(R.id.btn);
 //                btn.setOnClickListener(new View.OnClickListener() {
 //                    @Override
 //                    public void onClick(View view) {
@@ -190,7 +189,7 @@ public class TableFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 View view1 =  recyclerView.findViewHolderForAdapterPosition(getAdapterPosition()).itemView;
-                        tableLayout = (TableLayout)  view1.findViewById(R.id.table);
+                tableLayout = view1.findViewById(R.id.table);
                         checkFilePermissionAndSave();
             }
         }

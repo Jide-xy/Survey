@@ -3,7 +3,6 @@ package com.example.babajidemustapha.survey;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +23,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * A login screen that offers login via email/password.
@@ -59,11 +60,11 @@ public class LoginActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_login);
         db = new SurveyDatabase(LoginActivity.this);
         // Set up the login form.
-        mUsernameView = (EditText) findViewById(R.id.username);
+        mUsernameView = findViewById(R.id.username);
 
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mProgressView = (ProgressBar) findViewById(R.id.login_progress);
-        mSignInButton = (Button) findViewById(R.id.sign_in_button);
+        mPasswordView = findViewById(R.id.password);
+        mProgressView = findViewById(R.id.login_progress);
+        mSignInButton = findViewById(R.id.sign_in_button);
         mSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {

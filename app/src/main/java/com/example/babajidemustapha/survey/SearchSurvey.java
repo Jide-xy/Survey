@@ -7,10 +7,6 @@ import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,12 +17,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.*;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,6 +33,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 /**
@@ -64,12 +65,12 @@ public class SearchSurvey extends Fragment {
         db = new SurveyDatabase(getContext());
         getActivity().setTitle("Search Survey");
         View view = inflater.inflate(R.layout.fragment_search_survey, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.online_surveys);
-        progressBar = (ProgressBar) view.findViewById(R.id.search_progress);
+        recyclerView = view.findViewById(R.id.online_surveys);
+        progressBar = view.findViewById(R.id.search_progress);
         requestQueue = Volley.newRequestQueue(getContext());
         preferences = getActivity().getSharedPreferences("user_data",Context.MODE_PRIVATE);
-        editText  = (EditText) view .findViewById(R.id.search_param);
-        btn = (Button) view.findViewById(R.id.online_search);
+        editText = view.findViewById(R.id.search_param);
+        btn = view.findViewById(R.id.online_search);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -198,11 +199,11 @@ public class SearchSurvey extends Fragment {
 
             private ViewHolder(View itemView) {
                 super(itemView);
-                name = (TextView) itemView.findViewById(R.id.name);
-                desc = (TextView) itemView.findViewById(R.id.desc);
-                date = (TextView) itemView.findViewById(R.id.date);
+                name = itemView.findViewById(R.id.name);
+                desc = itemView.findViewById(R.id.desc);
+                date = itemView.findViewById(R.id.date);
                 //     no_of_ques = (TextView) itemView.findViewById(R.id.no_of_questions);
-                privacy = (TextView) itemView.findViewById(R.id.privacy);
+                privacy = itemView.findViewById(R.id.privacy);
                 itemView.setOnClickListener(this);
             }
 
