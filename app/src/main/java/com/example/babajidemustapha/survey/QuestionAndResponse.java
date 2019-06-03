@@ -1,6 +1,9 @@
 package com.example.babajidemustapha.survey;
 
-import android.util.Log;
+import androidx.room.ColumnInfo;
+import androidx.room.TypeConverters;
+
+import com.example.babajidemustapha.survey.shared.room.StringListConverter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,13 +16,29 @@ import java.util.List;
  */
 
 public class QuestionAndResponse {
+    @ColumnInfo(name = "OFFLINE_ID")
     private int id;
+
+    @ColumnInfo(name = "Q_NO")
     private int questionNo;
+
+    @ColumnInfo(name = "Q_TYPE")
     private String questionType;
+
+    @ColumnInfo(name = "OFFLINE_SURVEY_ID")
     private int surveyID;
+
+    @TypeConverters(StringListConverter.class)
+    @ColumnInfo(name = "OPTIONS")
     private List<String> options;
+
+    @ColumnInfo(name = "MANDATORY")
     private boolean mandatory;
+
+    @ColumnInfo(name = "Q_TEXT")
     private String questionText;
+
+    @ColumnInfo(name = "RESPONSE")
     private String response;
 
     public QuestionAndResponse(int id, int questionNo, String questionType, int surveyID, JSONArray options, boolean mandatory, String questionText,String response){
@@ -72,6 +91,10 @@ public class QuestionAndResponse {
 
     public List<String> getOptions() {
         return options;
+    }
+
+    public void setOptions(List<String> options) {
+        this.options = options;
     }
 
     public void addOption(String option) {

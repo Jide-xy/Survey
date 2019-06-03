@@ -10,7 +10,7 @@
         android:id="@+id/emptyPlaceholder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="No response has been recorded for this survey yet."
+        android:text="No responseDetail has been recorded for this survey yet."
         android:textAlignment="center"
         android:textSize="40sp"
         android:layout_gravity="center"

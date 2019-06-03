@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="#ffffff"
-    tools:context="com.example.babajidemustapha.survey.LoginActivity">
+    tools:context="com.example.babajidemustapha.survey.features.LoginActivity">
 
     <!-- Login progress -->
 

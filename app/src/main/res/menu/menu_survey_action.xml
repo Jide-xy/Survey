@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.babajidemustapha.survey.SurveyAction">
+    tools:context="com.example.babajidemustapha.survey.features.takesurvey.activities.SurveyAction">
     <item
         android:id="@+id/action_take_survey"
         android:orderInCategory="100"
