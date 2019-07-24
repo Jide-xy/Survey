@@ -1,7 +1,5 @@
 package com.example.babajidemustapha.survey.shared.room.entities;
 
-import android.util.Log;
-
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -41,7 +39,7 @@ public class Question implements Serializable {
     @ColumnInfo(name = "Q_TYPE")
     private String questionType;
 
-    @ColumnInfo(name = "OFFLINE_SURVEY_ID")
+    @ColumnInfo(name = "OFFLINE_SURVEY_ID", index = true)
     private int surveyID;
 
     @ColumnInfo(name = "ONLINE_SURVEY_ID")
@@ -49,7 +47,7 @@ public class Question implements Serializable {
 
     @TypeConverters(StringListConverter.class)
     @ColumnInfo(name = "OPTIONS")
-    private List<String> options;
+    private List<String> options = new ArrayList<>();
 
     @ColumnInfo(name = "MANDATORY")
     private boolean mandatory;
@@ -62,7 +60,7 @@ public class Question implements Serializable {
 
 
     public Question(){
-        options = new ArrayList<>();
+//        options = new ArrayList<>();
     }
     public Question(int id, int questionNo, String questionType, int surveyID, JSONArray options, boolean mandatory, String questionText){
         //options = new ArrayList<>();
@@ -76,7 +74,7 @@ public class Question implements Serializable {
             if(options != null) {
                 this.options = new ArrayList<>();
                 for (int i = 0; i < options.length(); i++) {
-                    Log.e("djnjdn",options.getString(i));
+                    //Log.e("djnjdn",options.getString(i));
                     this.options.add(options.getString(i));
                 }
             }
@@ -121,13 +119,14 @@ public class Question implements Serializable {
     }
 
     public void setOptions(List<String> options){
-        for(String option: options){
-            this.options.add("\""+option+"\"");
-        }
+//        for(String option: options){
+//            this.options.add("\""+option+"\"");
+//        }
+        this.options.addAll(options);
     }
 
     public int getOptionCount(){
-        return this.options.size();
+        return options != null ? this.options.size() : 0;
     }
 
     public boolean isMandatory() {

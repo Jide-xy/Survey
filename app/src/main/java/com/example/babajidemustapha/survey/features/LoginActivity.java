@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
@@ -26,6 +27,7 @@ import com.example.babajidemustapha.survey.shared.room.entities.Question;
 import com.example.babajidemustapha.survey.shared.room.entities.ResponseDetail;
 import com.example.babajidemustapha.survey.shared.room.entities.ResponseHeader;
 import com.example.babajidemustapha.survey.shared.room.entities.Survey;
+import com.example.babajidemustapha.survey.shared.utils.DbOperationHelper;
 import com.example.babajidemustapha.survey.shared.utils.Sha1;
 import com.google.gson.Gson;
 
@@ -35,6 +37,9 @@ import org.json.JSONObject;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.example.babajidemustapha.survey.shared.utils.Constants.IS_GUEST;
+import static com.example.babajidemustapha.survey.shared.utils.Constants.IS_LOGGED_IN;
 
 /**
  * A login screen that offers login via email/password.
@@ -63,9 +68,7 @@ public class LoginActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         loginData = getSharedPreferences("user_data",MODE_PRIVATE);
         if(loginData.getBoolean("isLoggedIn",false)){
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
+            goToDashboard();
         }
         setContentView(R.layout.activity_login);
         db = SurveyDatabase.getInstance(this);
@@ -159,28 +162,36 @@ public class LoginActivity extends AppCompatActivity  {
                     try {
                         response = response_.getJSONArray("RESPONSE").getJSONObject(0);
                         if(response.getString("STATUS").equalsIgnoreCase("success")){
-                            JSONObject user_dt = response_.getJSONArray("USER_DETAILS").getJSONObject(0);
-                            db.surveyDao().saveOnlineSurvey(
-                                    Arrays.asList(new Gson().fromJson(response_.getJSONArray("SURVEYS").toString(), Survey[].class)));
-                            db.questionDao().saveOnlineQuestions(
-                                    Arrays.asList(new Gson().fromJson(response_.getJSONArray("QUESTIONS").toString(), Question[].class)));
-                            db.responseHeaderDao().saveOnlineResponseHeaders(
-                                    Arrays.asList(new Gson().fromJson(response_.getJSONArray("RESPONSES").toString(), ResponseHeader[].class)));
-                            db.responseDetailDao().saveOnlineResponseDetails(
-                                    Arrays.asList(new Gson().fromJson(response_.getJSONArray("RESPONSE_DETAILS").toString(), ResponseDetail[].class)));
-                            SharedPreferences.Editor editor =  loginData.edit();
-                            editor.putBoolean("isLoggedIn",true);
-                            editor.putString("USERNAME",user_dt.getString("USERNAME"));
-                            editor.putInt("USER_ID",user_dt.getInt("ID"));
-                            editor.putString("FIRST_NAME",user_dt.getString("FIRSTNAME"));
-                            editor.putString("PASSWORD",user_dt.getString("PASSWORD"));
-                            editor.putString("SURNAME",user_dt.getString("SURNAME"));
-                            editor.putString("EMAIL",user_dt.getString("EMAIL"));
-                            editor.putString("PHONE_NUMBER",user_dt.getString("PHONE_NUMBER"));
-                            editor.commit();
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
+                            DbOperationHelper.execute(new DbOperationHelper.IDbOperationHelper<Void>() {
+                                @Override
+                                public Void run() {
+                                    db.clearAllTables();
+                                    try {
+                                        db.surveyDao().saveOnlineSurvey(
+                                                Arrays.asList(new Gson().fromJson(response_.getJSONArray("SURVEYS").toString(), Survey[].class)));
+                                        db.questionDao().saveOnlineQuestions(
+                                                Arrays.asList(new Gson().fromJson(response_.getJSONArray("QUESTIONS").toString(), Question[].class)));
+                                        db.responseHeaderDao().saveOnlineResponseHeaders(
+                                                Arrays.asList(new Gson().fromJson(response_.getJSONArray("RESPONSES").toString(), ResponseHeader[].class)));
+                                        db.responseDetailDao().saveOnlineResponseDetails(
+                                                Arrays.asList(new Gson().fromJson(response_.getJSONArray("RESPONSE_DETAILS").toString(), ResponseDetail[].class)));
+                                    } catch (JSONException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                    return null;
+                                }
+
+                                @Override
+                                public void onCompleted(Void aVoid) {
+                                    try {
+                                        JSONObject user_dt = response_.getJSONArray("USER_DETAILS").getJSONObject(0);
+                                        saveUserData(user_dt);
+                                        goToDashboard();
+                                    } catch (JSONException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                }
+                            });
 //                            download();
 
                         }
@@ -231,6 +242,27 @@ public class LoginActivity extends AppCompatActivity  {
         return password.length() >= 1;
     }
 
+    private void saveUserData(@Nullable JSONObject user_dt) throws JSONException {
+        if (user_dt != null) {
+            SharedPreferences.Editor editor = loginData.edit();
+            editor.putBoolean(IS_LOGGED_IN, true);
+            editor.putString("USERNAME", user_dt.getString("USERNAME"));
+            editor.putInt("USER_ID", user_dt.getInt("ID"));
+            editor.putString("FIRST_NAME", user_dt.getString("FIRSTNAME"));
+            editor.putString("PASSWORD", user_dt.getString("PASSWORD"));
+            editor.putString("SURNAME", user_dt.getString("SURNAME"));
+            editor.putString("EMAIL", user_dt.getString("EMAIL"));
+            editor.putString("PHONE_NUMBER", user_dt.getString("PHONE_NUMBER"));
+            editor.apply();
+        }
+    }
+
+    private void goToDashboard() {
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     /**
      * Shows the progress UI and hides the login form.
      */
@@ -238,6 +270,14 @@ public class LoginActivity extends AppCompatActivity  {
     public void signUp(View view) {
         Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
         startActivity(intent);
+    }
+
+    public void skipLogin(View view) {
+        SharedPreferences.Editor editor = loginData.edit();
+        editor.putBoolean(IS_LOGGED_IN, true);
+        editor.putBoolean(IS_GUEST, true);
+        editor.apply();
+        goToDashboard();
     }
 
 //    private void download() {

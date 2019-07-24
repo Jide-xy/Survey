@@ -18,7 +18,6 @@ import com.example.babajidemustapha.survey.features.Reports.fragments.BarChartFr
 import com.example.babajidemustapha.survey.features.Reports.fragments.PieChartFragment;
 import com.example.babajidemustapha.survey.features.Reports.fragments.ResponseList;
 import com.example.babajidemustapha.survey.features.Reports.fragments.TableFragment;
-import com.example.babajidemustapha.survey.shared.room.db.SurveyDatabase;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -41,7 +40,6 @@ public class SurveyReportActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
     TabLayout tabLayout;
-    SurveyDatabase db;
     int survey_id;
     String survey_name;
 
@@ -52,7 +50,6 @@ public class SurveyReportActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         survey_id = bundle.getInt("ID");
         survey_name = bundle.getString("name");
-        db = SurveyDatabase.getInstance(this);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(survey_name.length()>15? survey_name.substring(0,12)+"..." : survey_name);

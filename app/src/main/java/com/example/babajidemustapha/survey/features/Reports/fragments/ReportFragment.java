@@ -102,7 +102,7 @@ public class ReportFragment extends Fragment {
             }
 
 //            holder.no_of_ques.setText(source.get(position).getNoOfQues()+" question(s)");
-            holder.privacy.setText(source.get(position).isPrivate()?"Public":"Private");
+            holder.privacy.setText(source.get(position).isPrivacy() ? "Public" : "Private");
         }
 
         @Override

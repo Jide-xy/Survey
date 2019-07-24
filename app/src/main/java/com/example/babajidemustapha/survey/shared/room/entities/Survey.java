@@ -93,7 +93,7 @@ public class Survey {
         this.name = name;
     }
 
-    public boolean isPrivate() {
+    public boolean isPrivacy() {
         return privacy;
     }
 

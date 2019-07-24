@@ -1,6 +1,11 @@
 package com.example.babajidemustapha.survey.shared.room.dao;
 
 import androidx.room.Dao;
+import androidx.room.Query;
+
+import com.example.babajidemustapha.survey.shared.room.entities.ResponseHeader;
+
+import java.util.List;
 
 @Dao
 public abstract class ResponseHeaderDao extends SurveyDao {
@@ -33,8 +38,8 @@ public abstract class ResponseHeaderDao extends SurveyDao {
 //    @Query("SELECT * FROM RESPONSE WHERE ONLINE_ID = :online_id")
 //    abstract ResponseHeader getResponseHeaderWithOnlineId(long online_id);
 //
-//    @Query("SELECT * FROM RESPONSE WHERE OFFLINE_SURVEY_ID = :survey_id ORDER BY OFFLINE_ID DESC")
-//    abstract List<ResponseHeader> getResponseHeaders(int survey_id);
+@Query("SELECT * FROM RESPONSE WHERE OFFLINE_SURVEY_ID = :survey_id ORDER BY OFFLINE_ID DESC")
+public abstract List<ResponseHeader> getResponseHeaders(int survey_id);
 //
 //    @Query("SELECT * FROM SURVEY WHERE OFFLINE_ID = :id")
 //    abstract Survey getSurveyFromOfflineId(long id);

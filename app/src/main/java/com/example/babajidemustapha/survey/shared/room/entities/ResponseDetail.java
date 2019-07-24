@@ -3,6 +3,7 @@ package com.example.babajidemustapha.survey.shared.room.entities;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 /**
@@ -11,7 +12,7 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "RESPONSE_DETAIL", foreignKeys = {@ForeignKey(entity = Question.class,
         parentColumns = "OFFLINE_ID",
         childColumns = "OFFLINE_QUESTION_ID"),
-        @ForeignKey(entity = ResponseDetail.class,
+        @ForeignKey(entity = ResponseHeader.class,
                 parentColumns = "OFFLINE_ID",
                 childColumns = "OFFLINE_RESPONSE_ID")
 })
@@ -28,13 +29,13 @@ public class ResponseDetail {
     @ColumnInfo(name = "ONLINE_RES_DETAIL_ID")
     private int online_id;
 
-    @ColumnInfo(name = "OFFLINE_RESPONSE_ID")
+    @ColumnInfo(name = "OFFLINE_RESPONSE_ID", index = true)
     private int response_id;
 
     @ColumnInfo(name = "ONLINE_RESPONSE_ID")
     private int online_response_id;
 
-    @ColumnInfo(name = "OFFLINE_QUESTION_ID")
+    @ColumnInfo(name = "OFFLINE_QUESTION_ID", index = true)
     private int question_id;
 
     @ColumnInfo(name = "ONLINE_QUESTION_ID")
@@ -49,11 +50,13 @@ public class ResponseDetail {
     public ResponseDetail() {
     }
 
+    @Ignore
     public ResponseDetail(int question_id, String response) {
         this.response = response;
         this.question_id = question_id;
     }
 
+    @Ignore
     public ResponseDetail(int id, int question_id, String response) {
         this.id = id;
         this.response = response;

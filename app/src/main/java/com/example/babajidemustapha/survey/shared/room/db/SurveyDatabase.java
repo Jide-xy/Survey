@@ -24,29 +24,12 @@ public abstract class SurveyDatabase extends RoomDatabase {
     private static final Object sLock = new Object();
     private static SurveyDatabase INSTANCE;
     private static final String name = "SURVEY_DB";
-    private static final int version = 1;
-    private static final String createSurveyTable = "CREATE TABLE SURVEY(OFFLINE_ID INTEGER PRIMARY KEY," +
-            " ONLINE_ID INTEGER, NAME TEXT, PRIVACY INTEGER, USERNAME TEXT, DATE_CREATED TEXT, DESCRIPTION TEXT,SYNCED INTEGER)";
-    private static final String createQuestionTable = "CREATE TABLE QUESTION(OFFLINE_SURVEY_ID INTEGER, " +
-            "ONLINE_SURVEY_ID INTEGER, Q_NO INTEGER, Q_TYPE TEXT, MANDATORY INTEGER, Q_TEXT TEXT, OPTIONS TEXT," +
-            "OFFLINE_ID INTEGER PRIMARY KEY, ONLINE_ID INTEGER,SYNCED INTEGER," +
-            "FOREIGN KEY(OFFLINE_SURVEY_ID) REFERENCES SURVEY(OFFLINE_ID))";
-    private static final String createResponseTable = "CREATE TABLE RESPONSE(ONLINE_SURVEY_ID INTEGER," +
-            " ONLINE_ID INTEGER, RESPONDENT_NAME TEXT, RESPONSE_DATE TEXT,SYNCED INTEGER," +
-            "OFFLINE_ID INTEGER PRIMARY KEY, OFFLINE_SURVEY_ID INTEGER, " +
-            "FOREIGN KEY(OFFLINE_SURVEY_ID) REFERENCES SURVEY(OFFLINE_ID))";
-    private static final String createResDetailTable = "CREATE TABLE RESPONSE_DETAIL(OFFLINE_RES_DETAIL_ID INTEGER PRIMARY KEY," +
-            "ONLINE_RESPONSE_ID INTEGER, ONLINE_QUESTION_ID INTEGER, RESPONSE TEXT,"  +
-            "ONLINE_RES_DETAIL_ID INTEGER, OFFLINE_RESPONSE_ID INTEGER, OFFLINE_QUESTION_ID INTEGER,SYNCED INTEGER," +
-            "FOREIGN KEY(OFFLINE_RESPONSE_ID) REFERENCES RESPONSE(OFFLINE_ID)," +
-            "FOREIGN KEY(OFFLINE_QUESTION_ID) REFERENCES QUESTION(OFFLINE_ID))";
 
     public static SurveyDatabase getInstance(Context application) {
         synchronized (sLock) {
             if (INSTANCE == null) {
                 INSTANCE = Room.databaseBuilder(application.getApplicationContext(), SurveyDatabase.class, name)
                         .fallbackToDestructiveMigration()
-                        .allowMainThreadQueries()
                         .build();
             }
             return INSTANCE;
@@ -353,7 +336,7 @@ public abstract class SurveyDatabase extends RoomDatabase {
 //        SQLiteDatabase db = this.getWritableDatabase();
 //        ContentValues values = new ContentValues();
 //        values.put("NAME", survey.getName());
-//        values.put("PRIVACY",survey.isPrivate());
+//        values.put("PRIVACY",survey.isPrivacy());
 //        values.put("DESCRIPTION",survey.getDesc());
 //        values.put("USERNAME",survey.getUsername());
 //        values.put("DATE_CREATED",survey.getDate());

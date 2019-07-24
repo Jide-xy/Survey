@@ -23,6 +23,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
@@ -36,6 +38,9 @@ import com.example.babajidemustapha.survey.shared.room.db.SurveyDatabase;
 import com.example.babajidemustapha.survey.shared.room.entities.Question;
 import com.example.babajidemustapha.survey.shared.room.entities.ResponseDetail;
 import com.example.babajidemustapha.survey.shared.room.entities.ResponseHeader;
+import com.example.babajidemustapha.survey.shared.utils.DbOperationHelper;
+import com.example.babajidemustapha.survey.shared.utils.DbOperationHelper.IDbOperationHelper;
+import com.example.babajidemustapha.survey.shared.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,6 +50,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -69,7 +75,11 @@ public class AnswerSurvey extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.content_take_survey,container,false);
+        return inflater.inflate(R.layout.content_take_survey, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         Bundle bundle = getActivity().getIntent().getExtras();
         survey_id = bundle.getInt("ID");
@@ -106,17 +116,27 @@ public class AnswerSurvey extends Fragment {
 //        });
         if(!online) {
             db = SurveyDatabase.getInstance(getContext());
-            questions = db.surveyDao().getQuestionsForSurveyWithOfflineId(survey_id);
+            DbOperationHelper.execute(new IDbOperationHelper<List<Question>>() {
+                @Override
+                public List<Question> run() {
+                    return db.surveyDao().getQuestionsForSurveyWithOfflineId(survey_id);
+                }
+
+                @Override
+                public void onCompleted(List<Question> questions) {
+                    AnswerSurvey.this.questions = questions;
+                    buildQuestions(AnswerSurvey.this.questions, rootView);
+                }
+            });
             getActivity().setTitle(survey_name.length() <= 10 ? survey_name : survey_name.substring(0, 7) + "...");
         }
         else {
             device_token = bundle.getString("device_token");
             questions = (ArrayList<Question>) bundle.getSerializable("questions");
             getActivity().setTitle(survey_name.length() <= 10 ? survey_name : survey_name.substring(0, 7) + "...");
+            buildQuestions(questions, rootView);
         }
-        Log.e("id",questions.toString());
-        buildQuestions(questions,rootView);
-        return view;
+        super.onViewCreated(view, savedInstanceState);
     }
 
     public void buildQuestions(final List<Question> questions, ViewGroup view){
@@ -190,7 +210,7 @@ public class AnswerSurvey extends Fragment {
                     for(int j = 0 ; j < question.getOptionCount(); j++ ){
                         CheckBox cb = rootView.findViewWithTag("qu" + question.getQuestionNo() + "op" + j);
                         if(cb.isChecked()){
-                            cbList.add("\""+cb.getText().toString()+"\"");
+                            cbList.add(cb.getText().toString());
                         }
                     }
                     if(!cbList.isEmpty()){
@@ -215,7 +235,7 @@ public class AnswerSurvey extends Fragment {
     }
     public void saveOnlineResponse(List<Question> questions){
         final ProgressDialog progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("Saving ResponseDetail. Please wait...");
+        progressDialog.setMessage("Saving Response. Please wait...");
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(false);
         progressDialog.show();
@@ -284,17 +304,17 @@ public class AnswerSurvey extends Fragment {
         CardView cardView = new CardView(getContext());
         CardView.LayoutParams layoutParams = new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT,CardView.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(0,
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics()),
+                Utils.pxToDp(getResources(), 2),
                 0,
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics()));
+                Utils.pxToDp(getResources(), 2));
         cardView.setLayoutParams(layoutParams);
         LinearLayout ll = new LinearLayout(getContext());
         ll.setOrientation(LinearLayout.VERTICAL);
         ll.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        ll.setPadding((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, getResources().getDisplayMetrics()),
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, getResources().getDisplayMetrics()),
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, getResources().getDisplayMetrics()),
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, getResources().getDisplayMetrics()));
+        ll.setPadding(Utils.pxToDp(getResources(), 16),
+                Utils.pxToDp(getResources(), 16),
+                Utils.pxToDp(getResources(), 16),
+                Utils.pxToDp(getResources(), 16));
         TextView q_text = new TextView(getContext());
         TextView q_No = new TextView(getContext());
         if(question.isMandatory()){
@@ -303,25 +323,25 @@ public class AnswerSurvey extends Fragment {
             q_No.setText(star);
         }
         else{
-            q_No.setText(question.getQuestionNo()+".");
+            q_No.setText(String.format(Locale.getDefault(), "%d.", question.getQuestionNo()));
         }
         q_No.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
         q_No.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         q_text.setText(question.getQuestionText());
         q_text.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
-        q_text.setPadding((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics()),
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics()),
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics()),
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics()));
+        q_text.setPadding(Utils.pxToDp(getResources(), 4),
+                Utils.pxToDp(getResources(), 4),
+                Utils.pxToDp(getResources(), 4),
+                Utils.pxToDp(getResources(), 4));
         q_text.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         LinearLayout subll = new LinearLayout(getContext());
         subll.setOrientation(LinearLayout.HORIZONTAL);
         subll.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         subll.addView(q_No);
         subll.addView(q_text);
-        if(question.isMandatory()){
-
-        }
+//        if(question.isMandatory()){
+//
+//        }
         ll.addView(subll);
         switch (question.getQuestionType()){
             case "TEXT":
@@ -365,9 +385,19 @@ public class AnswerSurvey extends Fragment {
         if (item.getItemId() == R.id.save_answers) {
             if (validate(questions)) {
                 if (!online) {
-                    submit();
-                    Toast.makeText(getContext(), "Your response has been recorded", Toast.LENGTH_SHORT).show();
-                    getActivity().finish();
+                    DbOperationHelper.execute(new IDbOperationHelper<Void>() {
+                        @Override
+                        public Void run() {
+                            submit();
+                            return null;
+                        }
+
+                        @Override
+                        public void onCompleted(Void aVoid) {
+                            Toast.makeText(getContext(), "Your response has been recorded", Toast.LENGTH_SHORT).show();
+                            getActivity().finish();
+                        }
+                    });
                 } else {
                     saveOnlineResponse(questions);
                 }

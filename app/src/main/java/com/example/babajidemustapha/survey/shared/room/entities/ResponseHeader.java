@@ -38,7 +38,7 @@ public class ResponseHeader {
     @ColumnInfo(name = "SYNCED")
     private boolean synced = false;
 
-    @ColumnInfo(name = "OFFLINE_SURVEY_ID")
+    @ColumnInfo(name = "OFFLINE_SURVEY_ID", index = true)
     private int survey_id;
 
     @ColumnInfo(name = "ONLINE_SURVEY_ID")
@@ -47,11 +47,14 @@ public class ResponseHeader {
     public ResponseHeader() {
     }
 
+    @Ignore
     public ResponseHeader(int survey_id, String respondentName, String date){
         this.respondentName = respondentName;
         this.date = date;
         this.survey_id = survey_id;
     }
+
+    @Ignore
     public ResponseHeader(int response_id, int survey_id, String respondentName, String date){
         this.response_id = response_id;
         this.respondentName = respondentName;

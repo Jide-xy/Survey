@@ -30,6 +30,7 @@ import com.example.babajidemustapha.survey.R;
 import com.example.babajidemustapha.survey.shared.room.db.SurveyDatabase;
 import com.example.babajidemustapha.survey.shared.room.entities.Question;
 import com.example.babajidemustapha.survey.shared.room.entities.Survey;
+import com.example.babajidemustapha.survey.shared.utils.DbOperationHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -93,7 +94,6 @@ public class CreateQuestions extends AppCompatActivity {
             public void onClick(View v) {
                 if(optText.getText().toString().isEmpty()){
                     Toast.makeText(CreateQuestions.this,"Option field cant be empty",Toast.LENGTH_SHORT).show();
-                    return;
                 }
                 else {
                     options.add(optText.getText().toString());
@@ -356,15 +356,25 @@ public class CreateQuestions extends AppCompatActivity {
             if (questions.size() == 0) {
                 Toast.makeText(CreateQuestions.this, "You must add at least one question", Toast.LENGTH_SHORT).show();
             } else {
-                Survey survey = new Survey();
-                survey.setName(survey_name);
-                survey.setDesc(survey_desc);
-                survey.setUsername("");
-                survey.setPrivacy(survey_privacy);
-                survey.setDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-                db.surveyDao().createSurveyWithQuestions(survey, questions);
-                Toast.makeText(CreateQuestions.this, "Your Survey has been recorded", Toast.LENGTH_SHORT).show();
-                finish();
+                DbOperationHelper.execute(new DbOperationHelper.IDbOperationHelper<Void>() {
+                    @Override
+                    public Void run() {
+                        Survey survey = new Survey();
+                        survey.setName(survey_name);
+                        survey.setDesc(survey_desc);
+                        survey.setUsername("");
+                        survey.setPrivacy(survey_privacy);
+                        survey.setDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                        db.surveyDao().createSurveyWithQuestions(survey, questions);
+                        return null;
+                    }
+
+                    @Override
+                    public void onCompleted(Void aVoid) {
+                        Toast.makeText(CreateQuestions.this, "Your Survey has been recorded", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                });
             }
             return true;
         }

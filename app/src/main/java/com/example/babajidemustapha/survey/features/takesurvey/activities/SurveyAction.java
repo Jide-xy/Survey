@@ -21,7 +21,6 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.babajidemustapha.survey.R;
 import com.example.babajidemustapha.survey.features.takesurvey.fragments.AnswerSurvey;
 import com.example.babajidemustapha.survey.features.takesurvey.fragments.SurveyDescription;
-import com.example.babajidemustapha.survey.shared.room.db.SurveyDatabase;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -44,7 +43,6 @@ public class SurveyAction extends AppCompatActivity {
      */
     private ViewPager mViewPager;
     TabLayout tabLayout;
-    SurveyDatabase db;
     int survey_id;
     boolean online;
 
@@ -68,7 +66,6 @@ public class SurveyAction extends AppCompatActivity {
 
             // Create the adapter that will return a fragment for each of the three
             // primary sections of the activity.
-            db = SurveyDatabase.getInstance(this);
 
             // mSectionsPagerAdapter.addFragment(new ResponseList(), "Responses");
             // Set up the ViewPager with the sections adapter.

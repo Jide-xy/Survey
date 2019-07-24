@@ -19,6 +19,7 @@ import com.example.babajidemustapha.survey.shared.room.db.SurveyDatabase;
 import com.example.babajidemustapha.survey.shared.room.entities.ResponseDetail;
 import com.example.babajidemustapha.survey.shared.room.entities.ResponseHeader;
 import com.example.babajidemustapha.survey.shared.room.entities.Survey;
+import com.example.babajidemustapha.survey.shared.utils.DbOperationHelper;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
@@ -64,35 +65,28 @@ public class FirebaseMessageHandler extends FirebaseMessagingService {
                     Log.e("ddd",response.toString());
                     try {
                         if(response.getString("STATUS").equalsIgnoreCase("success")){
-                            long response_id = db.surveyDao().saveOnlineResponseHeaders(
-                                    Arrays.asList(new Gson().fromJson(response.getJSONArray("RESPONSES").toString(), ResponseHeader[].class)))[0];
-                            db.surveyDao().saveOnlineResponseDetails(
-                                    Arrays.asList(new Gson().fromJson(response.getJSONArray("RESPONSE_DETAILS").toString(), ResponseDetail[].class)));
-                            Intent intent = new Intent(FirebaseMessageHandler.this, ResponseDetail.class);
-                            Log.e(TAG,"online id: "+response.getJSONArray("RESPONSES").getJSONObject(0).getInt("SURVEY_ID"));
-                            Survey survey = db.surveyDao().getSurveyWithOnlineId(response.getJSONArray("RESPONSES").getJSONObject(0).getInt("SURVEY_ID"));
-                           // Log.e(TAG,"offline id: "+db.getSurvey(response.getJSONArray("RESPONSES").getJSONObject(0).getInt("SURVEY_ID")));
-                            intent.putExtra("ID", response_id);
-//                            intent.putExtra("name",survey.getName());
-//                            intent.putExtra("Description",survey.getDesc());
-//                            intent.putExtra("quesNo",survey.getNoOfQues());
-//                            intent.putExtra("online", false);
-//                            intent.putExtra("from_notification", true);
-//                            intent.putExtra("response_id", response_id);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            PendingIntent pendingIntent = PendingIntent.getActivity(FirebaseMessageHandler.this, 1410,
-                                    intent, PendingIntent.FLAG_ONE_SHOT);
+                            DbOperationHelper.execute(new DbOperationHelper.IDbOperationHelper<Long>() {
+                                @Override
+                                public Long run() {
+                                    try {
+                                        long response_id = db.surveyDao().saveOnlineResponseHeaders(
+                                                Arrays.asList(new Gson().fromJson(response.getJSONArray("RESPONSES").toString(), ResponseHeader[].class)))[0];
+                                        db.surveyDao().saveOnlineResponseDetails(
+                                                Arrays.asList(new Gson().fromJson(response.getJSONArray("RESPONSE_DETAILS").toString(), ResponseDetail[].class)));
+                                        Survey survey = db.surveyDao().getSurveyWithOnlineId(response.getJSONArray("RESPONSES").getJSONObject(0).getInt("SURVEY_ID"));
+                                        return response_id;
+                                    } catch (JSONException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                }
 
-                            NotificationCompat.Builder notificationBuilder = new
-                                    NotificationCompat.Builder(FirebaseMessageHandler.this)
-                                    .setSmallIcon(R.drawable.ic_library_books_black_18dp)
-                                    .setContentTitle(data.get("TOPIC"))
-                                    .setContentText(data.get("MESSAGE"))
-                                    .setAutoCancel(true)
-                                    .setContentIntent(pendingIntent);
+                                @Override
+                                public void onCompleted(Long response_id) {
+                                    buildAndShowNotification(response_id);
+                                }
+                            });
 
-                            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                            notificationManager.notify(1410,notificationBuilder.build());
+
                         }
                         else {
                           //  Toast.makeText(getContext(),"An error occured",Toast.LENGTH_SHORT).show();
@@ -140,5 +134,24 @@ public class FirebaseMessageHandler extends FirebaseMessagingService {
         SharedPreferences.Editor edit = loginData.edit();
         edit.putString("DEVICE_TOKEN", s);
         edit.apply();
+    }
+
+    private void buildAndShowNotification(long response_id) {
+        Intent intent = new Intent(FirebaseMessageHandler.this, ResponseDetail.class);
+        intent.putExtra("ID", response_id);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(FirebaseMessageHandler.this, 1410,
+                intent, PendingIntent.FLAG_ONE_SHOT);
+
+        NotificationCompat.Builder notificationBuilder = new
+                NotificationCompat.Builder(FirebaseMessageHandler.this)
+                .setSmallIcon(R.drawable.ic_library_books_black_18dp)
+                .setContentTitle(data.get("TOPIC"))
+                .setContentText(data.get("MESSAGE"))
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(1410, notificationBuilder.build());
     }
 }

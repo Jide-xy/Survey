@@ -18,6 +18,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -28,6 +30,7 @@ import com.example.babajidemustapha.survey.R;
 import com.example.babajidemustapha.survey.shared.room.db.SurveyDatabase;
 import com.example.babajidemustapha.survey.shared.room.entities.Question;
 import com.example.babajidemustapha.survey.shared.room.entities.ResponseDetail;
+import com.example.babajidemustapha.survey.shared.utils.DbOperationHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,22 +64,35 @@ public class TableFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_table, container, false);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         tableLayout = null;
-        this.inflater = inflater;
         survey_id = getActivity().getIntent().getExtras().getInt("ID");
         db = SurveyDatabase.getInstance(getContext());
         questions = new ArrayList<>();
         xyCoord = new LinkedHashMap<>();
-        Map<Question, List<ResponseDetail>> reports = db.surveyDao().generateReport(survey_id);
-        buildXYcoord(reports);
         recyclerView = view.findViewById(R.id.tableList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new CustomAdapter1(questions));
-        return view;
+        DbOperationHelper.execute(new DbOperationHelper.IDbOperationHelper<Map<Question, List<ResponseDetail>>>() {
+            @Override
+            public Map<Question, List<ResponseDetail>> run() {
+                return db.surveyDao().generateReport(survey_id);
+            }
+
+            @Override
+            public void onCompleted(Map<Question, List<ResponseDetail>> reports) {
+                buildXYcoord(reports);
+                recyclerView.setAdapter(new CustomAdapter1(questions));
+            }
+        });
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        this.inflater = inflater;
+        return inflater.inflate(R.layout.fragment_table, container, false);
     }
 
     public void buildXYcoord(Map<Question, List<ResponseDetail>> report) {

@@ -23,6 +23,7 @@ import androidx.cardview.widget.CardView;
 import com.example.babajidemustapha.survey.QuestionAndResponse;
 import com.example.babajidemustapha.survey.R;
 import com.example.babajidemustapha.survey.shared.room.db.SurveyDatabase;
+import com.example.babajidemustapha.survey.shared.utils.DbOperationHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,14 +42,25 @@ public class ResponseDetail extends AppCompatActivity {
         setContentView(R.layout.activity_response_detail);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Bundle bundle = getIntent().getExtras();
         id = bundle.getInt("ID");
         Log.e("id",id +"");
         rootView = findViewById(R.id.responseRootView);
         db = SurveyDatabase.getInstance(this);
-        questions = db.responseDetailDao().getResponseDetailsWithRespectiveQuestions(id);
-        buildQuestions(questions,rootView);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        DbOperationHelper.execute(new DbOperationHelper.IDbOperationHelper<List<QuestionAndResponse>>() {
+            @Override
+            public List<QuestionAndResponse> run() {
+                return db.responseDetailDao().getResponseDetailsWithRespectiveQuestions(id);
+            }
+
+            @Override
+            public void onCompleted(List<QuestionAndResponse> questionAndResponses) {
+                questions = questionAndResponses;
+                buildQuestions(questions, rootView);
+            }
+        });
+
     }
     public View buildQuestion(QuestionAndResponse question){
          CardView cardview = new CardView(this);

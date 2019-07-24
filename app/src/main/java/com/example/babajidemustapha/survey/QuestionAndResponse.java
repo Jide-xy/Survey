@@ -1,6 +1,7 @@
 package com.example.babajidemustapha.survey;
 
 import androidx.room.ColumnInfo;
+import androidx.room.Ignore;
 import androidx.room.TypeConverters;
 
 import com.example.babajidemustapha.survey.shared.room.StringListConverter;
@@ -41,7 +42,13 @@ public class QuestionAndResponse {
     @ColumnInfo(name = "RESPONSE")
     private String response;
 
-    public QuestionAndResponse(int id, int questionNo, String questionType, int surveyID, JSONArray options, boolean mandatory, String questionText,String response){
+
+    public QuestionAndResponse() {
+
+    }
+
+    @Ignore
+    public QuestionAndResponse(int id, int questionNo, String questionType, int surveyID, JSONArray options, boolean mandatory, String questionText, String response){
         //options = new ArrayList<>();
         this.id = id;
         this.questionNo = questionNo;
@@ -56,8 +63,7 @@ public class QuestionAndResponse {
                 for (int i = 0; i < options.length(); i++) {
                     this.options.add(options.getString(i));
                 }
-            }
-            else{
+            } else{
                 this.options = null;
             }
         } catch (JSONException e) {

@@ -4,8 +4,6 @@ package com.example.babajidemustapha.survey.features.searchsurvey.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,8 +15,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.core.content.ContextCompat;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,7 +30,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.babajidemustapha.survey.R;
 import com.example.babajidemustapha.survey.features.takesurvey.activities.SurveyAction;
-import com.example.babajidemustapha.survey.shared.room.db.SurveyDatabase;
 import com.example.babajidemustapha.survey.shared.room.entities.Question;
 import com.example.babajidemustapha.survey.shared.room.entities.Survey;
 
@@ -44,6 +43,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.babajidemustapha.survey.features.dashboard.fragments.SurveyList.OnNavigationMenuSelected;
+
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,7 +53,6 @@ import java.util.List;
 public class SearchSurvey extends Fragment {
 
 
-    SurveyDatabase db;
     RequestQueue requestQueue;
     EditText editText;
     SharedPreferences preferences;
@@ -59,17 +60,27 @@ public class SearchSurvey extends Fragment {
     ProgressBar progressBar;
     Button btn;
     String token;
+    OnNavigationMenuSelected mListener;
     public SearchSurvey() {
         // Required empty public constructor
     }
 
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        db = SurveyDatabase.getInstance(getContext());
-        getActivity().setTitle("Search Survey");
-        View view = inflater.inflate(R.layout.fragment_search_survey, container, false);
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof OnNavigationMenuSelected) {
+            mListener = (OnNavigationMenuSelected) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnNavigationMenuSelected");
+        }
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mListener.setTitle("Search Online Surveys");
         recyclerView = view.findViewById(R.id.online_surveys);
         progressBar = view.findViewById(R.id.search_progress);
         requestQueue = Volley.newRequestQueue(getContext());
@@ -85,11 +96,17 @@ public class SearchSurvey extends Fragment {
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-       // recyclerView.setAdapter(new CustomAdapter1(db.getMySurveys()));
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),R.drawable.divider));
-        return view;
+        // recyclerView.setAdapter(new CustomAdapter1(db.getMySurveys()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), RecyclerView.VERTICAL));
     }
-    public List<Survey> buildSurvey(JSONObject object) throws JSONException{
+
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_search_survey, container, false);
+    }
+
+    private List<Survey> buildSurvey(JSONObject object) throws JSONException {
         List<Survey> result = new ArrayList<>();
         for(int i = 0; i< object.getJSONArray("SURVEYS").length();i++){
             JSONObject object1 = object.getJSONArray("SURVEYS").getJSONObject(i);
@@ -110,7 +127,8 @@ public class SearchSurvey extends Fragment {
         }
         return result;
     }
-    public void searchSurvey(){
+
+    private void searchSurvey() {
         String query = editText.getText().toString();
         if(query.isEmpty()){
 
@@ -158,6 +176,7 @@ public class SearchSurvey extends Fragment {
         }
 
     }
+
     private class CustomAdapter1 extends RecyclerView.Adapter<CustomAdapter1.ViewHolder> {
         List<Survey> source;
 
@@ -186,7 +205,7 @@ public class SearchSurvey extends Fragment {
             }
 
 //            holder.no_of_ques.setText(source.get(position).getNoOfQues()+" question(s)");
-            holder.privacy.setText(source.get(position).isPrivate()?"Public":"Private");
+            holder.privacy.setText(source.get(position).isPrivacy() ? "Public" : "Private");
             holder.privacy.setVisibility(View.GONE);
         }
 
@@ -228,37 +247,5 @@ public class SearchSurvey extends Fragment {
         }
     }
 
-    public class DividerItemDecoration extends RecyclerView.ItemDecoration {
-
-        private Drawable divider;
-
-
-        /**
-         * Custom divider will be used
-         */
-        public DividerItemDecoration(Context context, int resId) {
-            divider = ContextCompat.getDrawable(context, resId);
-        }
-
-        @Override
-        public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
-            int left = parent.getPaddingLeft();
-            int right = parent.getWidth() - parent.getPaddingRight();
-
-            int childCount = parent.getChildCount();
-            for (int i = 0; i < childCount; i++) {
-                View child = parent.getChildAt(i);
-
-                RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
-
-                int top = child.getBottom() + params.bottomMargin;
-                int bottom = top + divider.getIntrinsicHeight();
-
-                divider.setBounds(left, top, right, bottom);
-                divider.draw(c);
-            }
-
-        }
-    }
 
 }
