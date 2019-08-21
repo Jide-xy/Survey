@@ -20,9 +20,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.babajidemustapha.survey.R;
 import com.example.babajidemustapha.survey.features.Reports.activities.SurveyReportActivity;
-import com.example.babajidemustapha.survey.features.dashboard.activities.MainActivity;
+import com.example.babajidemustapha.survey.features.dashboard.activities.DashboardActivity;
 import com.example.babajidemustapha.survey.features.dashboard.adapters.SurveyAdapter;
-import com.example.babajidemustapha.survey.features.newsurvey.activities.NewSurveyActivity;
+import com.example.babajidemustapha.survey.features.newsurvey.activities.QuestionsSetupActivity;
 import com.example.babajidemustapha.survey.features.takesurvey.activities.SurveyAction;
 import com.example.babajidemustapha.survey.shared.room.db.SurveyDatabase;
 import com.example.babajidemustapha.survey.shared.room.entities.Survey;
@@ -32,6 +32,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.babajidemustapha.survey.shared.room.entities.Survey.SurveyQueryResult;
 
 
 /**
@@ -44,11 +46,13 @@ import java.util.List;
  */
 public class SurveyList extends Fragment implements SurveyAdapter.SurveyActionListener {
 
+    public static final String TAG = SurveyList.class.getSimpleName();
+
     private SurveyDatabase db;
     private SurveyAdapter adapter1;
     private RecyclerView recyclerView;
     private TextView placeholder;
-    private List<Survey> surveys;
+    private List<? extends Survey> surveys;
     private FloatingActionButton fab;
 
     private OnNavigationMenuSelected mListener;
@@ -73,15 +77,22 @@ public class SurveyList extends Fragment implements SurveyAdapter.SurveyActionLi
         return inflater.inflate(R.layout.fragment_survey_list, container, false);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadSurveys();
+
+    }
+
     public void loadSurveys() {
-        DbOperationHelper.execute(new IDbOperationHelper<List<Survey>>() {
+        DbOperationHelper.execute(new IDbOperationHelper<List<SurveyQueryResult>>() {
             @Override
-            public List<Survey> run() {
-                return db.surveyDao().getAllSurveys();
+            public List<SurveyQueryResult> run() {
+                return db.surveyDao().getAllSurveysWithResponseCount();
             }
 
             @Override
-            public void onCompleted(List<Survey> surveys) {
+            public void onCompleted(List<SurveyQueryResult> surveys) {
                 SurveyList.this.surveys = surveys;
                 if (SurveyList.this.surveys.isEmpty()) {
                     recyclerView.setVisibility(View.GONE);
@@ -154,14 +165,11 @@ public class SurveyList extends Fragment implements SurveyAdapter.SurveyActionLi
         fab = view.findViewById(R.id.fab);
         surveys = new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), NewSurveyActivity.class);
-                startActivity(intent);
-            }
+        fab.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), QuestionsSetupActivity.class);
+            startActivity(intent);
         });
-        loadSurveys();
+        //loadSurveys();
         setHasOptionsMenu(true);
     }
 
@@ -172,7 +180,7 @@ public class SurveyList extends Fragment implements SurveyAdapter.SurveyActionLi
 //        SearchView searchView =
 //                (SearchView) menu.findItem(R.id.search).getActionView();
         MenuItem item = menu.findItem(R.id.search);
-        SearchView sv = new SearchView(((MainActivity) getActivity()).getSupportActionBar().getThemedContext());
+        SearchView sv = new SearchView(((DashboardActivity) getActivity()).getSupportActionBar().getThemedContext());
         item.setShowAsAction(item.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | item.SHOW_AS_ACTION_IF_ROOM);
         item.setActionView(sv);
         sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

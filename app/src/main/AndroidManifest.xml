@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.babajidemustapha.survey">
-
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
@@ -12,22 +11,42 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
+        android:name="androidx.multidex.MultiDexApplication"
         android:allowBackup="true"
         android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-
-        <!-- android:name="android.support.multidex.MultiDexApplication" -->
-
+        android:theme="@style/AppTheme.NoActionBar">
         <activity
-            android:name=".features.LoginActivity"
-            android:label="@string/app_name">
+            android:name=".features.dashboard.activities.DashboardActivity"
+            android:label="@string/title_activity_dashboard2"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".features.newsurvey.activities.QuestionsSetupActivity"
+            android:label="@string/title_activity_questions_setup"
+            android:parentActivityName=".features.dashboard.activities.DashboardActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".features.dashboard.activities.DashboardActivity" />
+        </activity>
+        <activity
+            android:name=".features.introduction.IntroductionActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity> <!-- android:name="android.support.multidex.MultiDexApplication" -->
+        <activity
+            android:name=".features.LoginActivity"
+            android:label="@string/app_name"
+            android:parentActivityName=".features.introduction.IntroductionActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".features.introduction.IntroductionActivity" />
         </activity>
         <activity
             android:name=".features.dashboard.activities.MainActivity"
@@ -48,20 +67,20 @@
         <activity
             android:name=".features.newsurvey.activities.CreateQuestions"
             android:label="@string/title_activity_create_questions"
-            android:parentActivityName=".features.dashboard.activities.MainActivity"
+            android:parentActivityName=".features.dashboard.activities.DashboardActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.babajidemustapha.survey.features.dashboard.activities.MainActivity" />
+                android:value="com.example.babajidemustapha.survey.features.dashboard.activities.DashboardActivity" />
         </activity>
         <activity
             android:name=".features.takesurvey.activities.SurveyAction"
             android:label="@string/title_activity_survey_action"
-            android:parentActivityName=".features.dashboard.activities.MainActivity"
+            android:parentActivityName=".features.dashboard.activities.DashboardActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.babajidemustapha.survey.features.dashboard.activities.MainActivity" />
+                android:value="com.example.babajidemustapha.survey.features.dashboard.activities.DashboardActivity" />
         </activity>
 
         <service android:name=".shared.firebase.FirebaseMessageHandler">
@@ -73,20 +92,20 @@
         <activity
             android:name=".features.Reports.activities.SurveyReportActivity"
             android:label="@string/title_activity_survey_report"
-            android:parentActivityName=".features.dashboard.activities.MainActivity"
+            android:parentActivityName=".features.dashboard.activities.DashboardActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.babajidemustapha.survey.features.dashboard.activities.MainActivity" />
+                android:value="com.example.babajidemustapha.survey.features.dashboard.activities.DashboardActivity" />
         </activity>
         <activity
             android:name=".features.newsurvey.activities.NewSurveyActivity"
             android:label="@string/title_activity_new_survey"
-            android:parentActivityName=".features.dashboard.activities.MainActivity"
+            android:parentActivityName=".features.dashboard.activities.DashboardActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.babajidemustapha.survey.features.dashboard.activities.MainActivity" />
+                android:value="com.example.babajidemustapha.survey.features.dashboard.activities.DashboardActivity" />
         </activity>
     </application>
 

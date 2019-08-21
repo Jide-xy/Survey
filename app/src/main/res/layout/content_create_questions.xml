@@ -68,6 +68,19 @@
                     android:layout_gravity="center"
                     android:text="Mandatory"
                     android:layout_weight="1"/>
+
+                <Button
+                    android:id="@+id/addQuestion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:padding="4dp"
+                    android:text="Add Question"
+                    android:background="@drawable/form_button"
+                    android:textSize="12sp"
+                    android:layout_margin="@dimen/activity_vertical_margin"
+                    android:layout_gravity="center" />
                 <LinearLayout
                     android:id="@+id/optionConfig"
                     android:layout_width="match_parent"
@@ -112,24 +125,12 @@
                                 android:padding="4dp"
                                 android:textSize="8sp"
                                 android:layout_margin="@dimen/activity_vertical_margin"
-                                android:background="@drawable/custom_button"/>
+                                android:background="@drawable/form_button" />
                         </LinearLayout>
 
 
                     </LinearLayout>
                 </LinearLayout>
-                <Button
-                    android:id="@+id/addQuestion"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minHeight="0dp"
-                    android:minWidth="0dp"
-                    android:padding="4dp"
-                    android:text="Add Question"
-                    android:background="@drawable/custom_button"
-                    android:textSize="12sp"
-                    android:layout_margin="@dimen/activity_vertical_margin"
-                    android:layout_gravity="center"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -144,7 +145,7 @@
         <!--android:padding="4dp"-->
         <!--android:text="Create Survey"-->
         <!--android:layout_margin="@dimen/activity_vertical_margin"-->
-        <!--android:background="@drawable/custom_button"/>-->
+        <!--android:background="@drawable/form_button"/>-->
     </LinearLayout>
 
 </ScrollView>

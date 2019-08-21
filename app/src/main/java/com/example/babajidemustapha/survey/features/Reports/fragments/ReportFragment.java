@@ -3,6 +3,7 @@ package com.example.babajidemustapha.survey.features.Reports.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,12 +20,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.babajidemustapha.survey.R;
 import com.example.babajidemustapha.survey.features.Reports.activities.SurveyReportActivity;
-import com.example.babajidemustapha.survey.features.dashboard.activities.MainActivity;
+import com.example.babajidemustapha.survey.features.dashboard.activities.DashboardActivity;
 import com.example.babajidemustapha.survey.shared.room.db.SurveyDatabase;
 import com.example.babajidemustapha.survey.shared.room.entities.Survey;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,6 +69,35 @@ public class ReportFragment extends Fragment {
         recyclerView.setAdapter(adapter1);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.main, menu);
+//        SearchView searchView =
+//                (SearchView) menu.findItem(R.id.search).getActionView();
+        MenuItem item = menu.findItem(R.id.search);
+        SearchView sv = new SearchView(((DashboardActivity) getActivity()).getSupportActionBar().getThemedContext());
+        MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
+        MenuItemCompat.setActionView(item, sv);
+        sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                adapter1.changeSource(db.surveyDao().searchSurveys(query));
+                adapter1.notifyDataSetChanged();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter1.changeSource(db.surveyDao().searchSurveys(newText));
+                adapter1.notifyDataSetChanged();
+                return true;
+            }
+        });
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
     private class CustomAdapter1 extends RecyclerView.Adapter<CustomAdapter1.ViewHolder> {
         List<Survey> source;
 
@@ -94,12 +122,7 @@ public class ReportFragment extends Fragment {
         public void onBindViewHolder(ViewHolder holder, int position) {
             holder.name.setText(source.get(position).getName().length() >30 ? source.get(position).getName().substring(0,30)+"...":source.get(position).getName());
             holder.desc.setText(source.get(position).getDesc().length() > 40 ? source.get(position).getDesc().substring(0,40)+"..." : source.get(position).getDesc());
-            try {
-                holder.date.setText(new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(source.get(position).getDate())));
-            } catch (ParseException e) {
-                e.printStackTrace();
-                holder.date.setText(source.get(position).getDate());
-            }
+            holder.date.setText(DateFormat.format("yyyy-MM-dd", source.get(position).getDate()));
 
 //            holder.no_of_ques.setText(source.get(position).getNoOfQues()+" question(s)");
             holder.privacy.setText(source.get(position).isPrivacy() ? "Public" : "Private");
@@ -135,33 +158,5 @@ public class ReportFragment extends Fragment {
                 startActivity(intent);
             }
         }
-    }
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.main, menu);
-//        SearchView searchView =
-//                (SearchView) menu.findItem(R.id.search).getActionView();
-        MenuItem item = menu.findItem(R.id.search);
-        SearchView sv = new SearchView(((MainActivity) getActivity()).getSupportActionBar().getThemedContext());
-        MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
-        MenuItemCompat.setActionView(item, sv);
-        sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                adapter1.changeSource(db.surveyDao().searchSurveys(query));
-                adapter1.notifyDataSetChanged();
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                adapter1.changeSource(db.surveyDao().searchSurveys(newText));
-                adapter1.notifyDataSetChanged();
-                return true;
-            }
-        });
-
-        super.onCreateOptionsMenu(menu,inflater);
     }
 }

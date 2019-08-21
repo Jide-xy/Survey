@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingStart="40dp"
+    android:paddingEnd="40dp"
+    tools:context=".features.introduction.IntroductionFragment">
+
+    <ImageView
+        android:id="@+id/feature_image"
+        android:layout_width="300dp"
+        android:layout_height="220dp"
+        android:contentDescription="@string/feature_image"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@id/feature_text_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/ic_make_money" />
+
+    <TextView
+        android:id="@+id/feature_text_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:textColor="#001f52"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@id/feature_text_detail"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="@string/hello_blank_fragment" />
+
+    <TextView
+        android:id="@+id/feature_text_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:textColor="#5e697c"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="@string/hello_blank_fragment" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

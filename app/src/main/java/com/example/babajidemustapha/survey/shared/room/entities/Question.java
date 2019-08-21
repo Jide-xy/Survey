@@ -1,19 +1,26 @@
 package com.example.babajidemustapha.survey.shared.room.entities;
 
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
+import com.example.babajidemustapha.survey.shared.models.QuestionType;
+import com.example.babajidemustapha.survey.shared.room.QuestionTypeConverter;
 import com.example.babajidemustapha.survey.shared.room.StringListConverter;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Babajide Mustapha on 9/19/2017.
@@ -30,14 +37,18 @@ public class Question implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
+    @Ignore
+    private String tempId = UUID.randomUUID().toString();
+
     @ColumnInfo(name = "ONLINE_ID")
     private int online_id;
 
     @ColumnInfo(name = "Q_NO")
     private int questionNo;
 
+    @TypeConverters(QuestionTypeConverter.class)
     @ColumnInfo(name = "Q_TYPE")
-    private String questionType;
+    private QuestionType questionType;
 
     @ColumnInfo(name = "OFFLINE_SURVEY_ID", index = true)
     private int surveyID;
@@ -58,11 +69,21 @@ public class Question implements Serializable {
     @ColumnInfo(name = "SYNCED")
     private boolean synced = false;
 
+    @Ignore
+    private ResponseDetail questionResponse;
+
+//    private List<Integer> selectedCheckBoxIndexes;
+//    private String textAnswer;
+//
+//    var selectedRadioButtonIndex:Int = -1
+
 
     public Question(){
 //        options = new ArrayList<>();
     }
-    public Question(int id, int questionNo, String questionType, int surveyID, JSONArray options, boolean mandatory, String questionText){
+
+    @Ignore
+    public Question(int id, int questionNo, QuestionType questionType, int surveyID, JSONArray options, boolean mandatory, String questionText) {
         //options = new ArrayList<>();
         this.id = id;
         this.questionNo = questionNo;
@@ -94,11 +115,11 @@ public class Question implements Serializable {
         this.questionNo = questionNo;
     }
 
-    public String getQuestionType() {
+    public QuestionType getQuestionType() {
         return questionType;
     }
 
-    public void setQuestionType(String questionType) {
+    public void setQuestionType(QuestionType questionType) {
         this.questionType = questionType;
     }
 
@@ -176,5 +197,47 @@ public class Question implements Serializable {
 
     public void setSynced(boolean synced) {
         this.synced = synced;
+    }
+
+    public String getTempId() {
+        return tempId;
+    }
+
+    public ResponseDetail getQuestionResponse() {
+        return questionResponse;
+    }
+
+    public void setQuestionResponse(ResponseDetail questionResponse) {
+        this.questionResponse = questionResponse;
+    }
+
+    @Nullable
+    public List<Integer> getMultiSelectResponseIndex() {
+        if (questionResponse == null || questionResponse.getResponse() == null || questionResponse.getResponse().isEmpty()) {
+            return null;
+        }
+        List<String> responses = new ArrayList<>(Arrays.asList(new Gson().fromJson(questionResponse.getResponse(), String[].class)));
+        List<Integer> indexes = new ArrayList<>();
+        for (String response : responses) {
+            for (int i = 0; i < options.size(); i++) {
+                if (options.get(i).equalsIgnoreCase(response)) {
+                    indexes.add(i);
+                    break;
+                }
+            }
+        }
+        return indexes;
+    }
+
+    public int getSingleOptionResponseIndex() {
+        if (questionResponse == null || questionResponse.getResponse() == null || questionResponse.getResponse().isEmpty()) {
+            return -1;
+        }
+        for (int i = 0; i < options.size(); i++) {
+            if (options.get(i).equalsIgnoreCase(questionResponse.getResponse())) {
+                return i;
+            }
+        }
+        return -1;
     }
 }

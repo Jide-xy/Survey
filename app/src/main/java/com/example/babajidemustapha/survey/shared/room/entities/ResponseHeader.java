@@ -30,7 +30,7 @@ public class ResponseHeader {
     private String respondentName;
 
     @ColumnInfo(name = "RESPONSE_DATE")
-    private String date;
+    private long date;
 
     @Ignore
     private String username;
@@ -48,25 +48,25 @@ public class ResponseHeader {
     }
 
     @Ignore
-    public ResponseHeader(int survey_id, String respondentName, String date){
+    public ResponseHeader(int survey_id, String respondentName, long date) {
         this.respondentName = respondentName;
         this.date = date;
         this.survey_id = survey_id;
     }
 
     @Ignore
-    public ResponseHeader(int response_id, int survey_id, String respondentName, String date){
+    public ResponseHeader(int response_id, int survey_id, String respondentName, long date) {
         this.response_id = response_id;
         this.respondentName = respondentName;
         this.date = date;
         this.survey_id = survey_id;
     }
 
-    public String getDate() {
+    public long getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(long date) {
         this.date = date;
     }
 

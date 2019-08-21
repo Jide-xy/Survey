@@ -1,17 +1,18 @@
 package com.example.babajidemustapha.survey.features.Reports.adapters;
 
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.babajidemustapha.survey.R;
 import com.example.babajidemustapha.survey.shared.room.entities.ResponseHeader;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHolder> {
@@ -27,24 +28,18 @@ public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHo
         source.add(responseHeader);
     }
 
+    @NonNull
     @Override
-    public ResponseAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ResponseAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ResponseAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.response_list_item_layout, parent, false));
     }
 
     @Override
     public void onBindViewHolder(ResponseAdapter.ViewHolder holder, int position) {
         Log.e("id", source.get(position).getResponse_id() + "");
-        holder.name.setText("ResponseDetail by: " + (!source.get(position).getRespondentName().isEmpty() ? source.get(position).getRespondentName() : "Anonymous"));
-        try {
-            holder.date.setText(new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(source.get(position).getDate())));
-            holder.time.setText(new SimpleDateFormat("HH:mm").format(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(source.get(position).getDate())));
-
-        } catch (Exception e) {
-            holder.date.setText(source.get(position).getDate());
-            holder.time.setText("00:00");
-            e.printStackTrace();
-        }
+        holder.name.setText("Response by: " + (source.get(position).getRespondentName() != null && !source.get(position).getRespondentName().isEmpty() ? source.get(position).getRespondentName() : "Anonymous"));
+        holder.date.setText(DateFormat.format("dd/MM/yy", source.get(position).getDate()));
+        holder.time.setText(DateFormat.format("HH:mm", source.get(position).getDate()));
     }
 
     @Override

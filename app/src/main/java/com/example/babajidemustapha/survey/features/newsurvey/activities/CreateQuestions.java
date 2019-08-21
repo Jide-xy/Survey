@@ -27,6 +27,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 
 import com.example.babajidemustapha.survey.R;
+import com.example.babajidemustapha.survey.shared.models.QuestionType;
 import com.example.babajidemustapha.survey.shared.room.db.SurveyDatabase;
 import com.example.babajidemustapha.survey.shared.room.entities.Question;
 import com.example.babajidemustapha.survey.shared.room.entities.Survey;
@@ -35,9 +36,7 @@ import com.example.babajidemustapha.survey.shared.utils.DbOperationHelper;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class CreateQuestions extends AppCompatActivity {
@@ -177,8 +176,8 @@ public class CreateQuestions extends AppCompatActivity {
     }
     public void tryAddQuestion(){
         Question question = new Question();
-        switch (quesType.getSelectedItem().toString()){
-            case "TEXT":
+        switch (QuestionType.valueOf(quesType.getSelectedItem().toString())) {
+            case SHORT_TEXT:
                 if(quesText.getText().toString().isEmpty()){
                     Toast.makeText(this,"Question field can't be empty",Toast.LENGTH_SHORT).show();
                     quesText.requestFocus();
@@ -188,11 +187,11 @@ public class CreateQuestions extends AppCompatActivity {
                     i++;
                     question.setQuestionText(quesText.getText().toString());
                     question.setMandatory(mandatory.isChecked());
-                    question.setQuestionType(quesType.getSelectedItem().toString());
+                    question.setQuestionType(QuestionType.SHORT_TEXT);
                     question.setQuestionNo(questions.size()+1);
                 }
                 break;
-            case "SINGLE OPTION":
+            case SINGLE_OPTION:
                 if(quesText.getText().toString().isEmpty()){
                     Toast.makeText(this,"Question field cant be empty",Toast.LENGTH_SHORT).show();
                     quesText.requestFocus();
@@ -206,12 +205,12 @@ public class CreateQuestions extends AppCompatActivity {
                     i++;
                     question.setQuestionText(quesText.getText().toString());
                     question.setMandatory(mandatory.isChecked());
-                    question.setQuestionType("SINGLE");
+                    question.setQuestionType(QuestionType.SINGLE_OPTION);
                     question.setQuestionNo(questions.size()+1);
                     question.setOptions(options);
                 }
                 break;
-            case "MULTIPLE OPTIONS":
+            case MULTIPLE_OPTION:
                 if(quesText.getText().toString().isEmpty()){
                     Toast.makeText(this,"Question field cant be empty",Toast.LENGTH_SHORT).show();
                     quesText.requestFocus();
@@ -225,7 +224,7 @@ public class CreateQuestions extends AppCompatActivity {
                     i++;
                     question.setQuestionText(quesText.getText().toString());
                     question.setMandatory(mandatory.isChecked());
-                    question.setQuestionType("MULTI");
+                    question.setQuestionType(QuestionType.MULTIPLE_OPTION);
                     question.setQuestionNo(questions.size()+1);
                     question.setOptions(options);
                 }
@@ -288,12 +287,12 @@ public class CreateQuestions extends AppCompatActivity {
 
         ll.addView(subll);
         switch (question.getQuestionType()){
-            case "TEXT":
+            case SHORT_TEXT:
                 EditText ans = new EditText(this);
                ans.setEnabled(false);
                 ll.addView(ans);
                 break;
-            case "SINGLE":
+            case SINGLE_OPTION:
                 RadioGroup radioGroup = new RadioGroup(this);
                 radioGroup.setTag("rg"+ question.getQuestionNo());
                 try {
@@ -311,7 +310,7 @@ public class CreateQuestions extends AppCompatActivity {
                 }
                 ll.addView(radioGroup);
                 break;
-            case "MULTI":
+            case MULTIPLE_OPTION:
                 LinearLayout llcb = new LinearLayout(this);
                 llcb.setOrientation(LinearLayout.VERTICAL);
                 llcb.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -364,7 +363,7 @@ public class CreateQuestions extends AppCompatActivity {
                         survey.setDesc(survey_desc);
                         survey.setUsername("");
                         survey.setPrivacy(survey_privacy);
-                        survey.setDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                        //survey.setDate(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()));
                         db.surveyDao().createSurveyWithQuestions(survey, questions);
                         return null;
                     }

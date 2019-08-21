@@ -18,7 +18,7 @@ import com.example.babajidemustapha.survey.shared.room.entities.Survey;
 /**
  * Created by Babajide Mustapha on 9/18/2017.
  */
-@Database(entities = {Question.class, ResponseDetail.class, ResponseHeader.class, Survey.class}, version = 1)
+@Database(entities = {Question.class, ResponseDetail.class, ResponseHeader.class, Survey.class}, version = 3)
 public abstract class SurveyDatabase extends RoomDatabase {
     Context context;
     private static final Object sLock = new Object();

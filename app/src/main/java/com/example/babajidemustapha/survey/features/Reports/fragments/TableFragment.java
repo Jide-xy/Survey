@@ -100,8 +100,8 @@ public class TableFragment extends Fragment {
         for (Map.Entry<Question, List<ResponseDetail>> x : report.entrySet()) {
             Log.e("question NO: ", x.getKey().getQuestionNo()+"");
             switch (x.getKey().getQuestionType()){
-                case "TEXT":
-                case "SINGLE":
+                case SHORT_TEXT:
+                case SINGLE_OPTION:
                     Map<String,Integer> xy = new LinkedHashMap<>();
                     for (ResponseDetail responseDetail : x.getValue()) {
                         if (!responseDetail.getResponse().trim().isEmpty()) {
@@ -116,7 +116,7 @@ public class TableFragment extends Fragment {
                     xyCoord.put(x.getKey(),xy);
                     questions.add(x.getKey());
                     break;
-                case "MULTI":
+                case MULTIPLE_OPTION:
                     Map<String,Integer> xy1 = new LinkedHashMap<>();
                     for (ResponseDetail responseDetail : x.getValue()) {
                         try {

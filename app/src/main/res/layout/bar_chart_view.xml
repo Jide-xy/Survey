@@ -39,5 +39,5 @@
         android:minHeight="0dp"
         android:minWidth="0dp"
         android:padding="6dp"
-        android:background="@drawable/custom_button"/>
+        android:background="@drawable/form_button" />
 </LinearLayout>

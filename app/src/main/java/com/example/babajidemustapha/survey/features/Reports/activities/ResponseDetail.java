@@ -20,8 +20,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 
-import com.example.babajidemustapha.survey.QuestionAndResponse;
 import com.example.babajidemustapha.survey.R;
+import com.example.babajidemustapha.survey.shared.models.QuestionAndResponse;
 import com.example.babajidemustapha.survey.shared.room.db.SurveyDatabase;
 import com.example.babajidemustapha.survey.shared.utils.DbOperationHelper;
 
@@ -104,13 +104,13 @@ public class ResponseDetail extends AppCompatActivity {
 
         ll.addView(subll);
         switch (question.getQuestionType()){
-            case "TEXT":
+            case SHORT_TEXT:
                 TextView ans = new TextView(this);
                 ans.setTag(question.getQuestionNo());
                 ans.setText("Answer: "+ question.getResponse());
                 ll.addView(ans);
                 break;
-            case "SINGLE":
+            case SINGLE_OPTION:
                 RadioGroup radioGroup = new RadioGroup(this);
                 radioGroup.setTag("rg"+ question.getQuestionNo());
                 List<String> options = question.getOptions();
@@ -126,7 +126,7 @@ public class ResponseDetail extends AppCompatActivity {
                 }
                 ll.addView(radioGroup);
                 break;
-            case "MULTI":
+            case MULTIPLE_OPTION:
                 LinearLayout llcb = new LinearLayout(this);
                 llcb.setOrientation(LinearLayout.VERTICAL);
                 llcb.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));

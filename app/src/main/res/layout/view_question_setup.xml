@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppTheme.ShadowStyle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginBottom="50dp"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="2dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <EditText
+            android:id="@+id/question_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:gravity="top"
+            android:hint="@string/enter_your_questionr"
+            android:maxLines="3"
+            android:textColor="@color/survey_name_color"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="@id/question_no"
+            app:layout_constraintTop_toBottomOf="@id/question_no" />
+
+        <ImageButton
+            android:id="@+id/deleteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:contentDescription="@string/clear_question"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/question_no"
+            app:srcCompat="@drawable/ic_clear_red_with_bg" />
+
+        <LinearLayout
+            android:id="@+id/question_options_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/compulsory"
+            app:layout_constraintTop_toBottomOf="@id/compulsory"
+            tools:visibility="visible">
+
+        </LinearLayout>
+
+        <Switch
+            android:id="@+id/compulsory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:switchPadding="10dp"
+            android:text="@string/compulsory"
+            android:textColor="@color/survey_desc_color"
+            app:layout_constraintStart_toStartOf="@id/question_text"
+            app:layout_constraintTop_toBottomOf="@id/question_text" />
+
+        <TextView
+            android:id="@+id/question_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/survey_desc_color"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Question 1" />
+
+        <TextView
+            android:id="@+id/add_options_button"
+            style="@style/TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_add_blue_with_bg"
+            android:drawablePadding="5dp"
+            android:text="@string/add_option"
+            android:textSize="14sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/question_options_container"
+            tools:visibility="visible" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

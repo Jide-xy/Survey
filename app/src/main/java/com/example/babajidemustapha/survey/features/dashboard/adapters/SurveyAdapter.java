@@ -1,5 +1,6 @@
 package com.example.babajidemustapha.survey.features.dashboard.adapters;
 
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -7,54 +8,50 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.babajidemustapha.survey.R;
 import com.example.babajidemustapha.survey.shared.room.entities.Survey;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.ViewHolder> {
-    private List<Survey> source;
+    private List<? extends Survey> source;
     private SurveyActionListener surveyActionListener;
 
-    public SurveyAdapter(List<Survey> source, SurveyActionListener surveyActionListener) {
+    public SurveyAdapter(List<? extends Survey> source, SurveyActionListener surveyActionListener) {
         this.source = source;
         this.surveyActionListener = surveyActionListener;
     }
 
-    public void add(Survey survey) {
-        source.add(survey);
-    }
+//    public void add(Survey survey) {
+//        source.add(survey);
+//    }
 
     public void changeSource(List<Survey> source) {
         this.source = source;
         notifyDataSetChanged();
     }
 
+    @NonNull
     @Override
-    public SurveyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public SurveyAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new SurveyAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.survey_item_layout, parent, false));
     }
 
     @Override
     public void onBindViewHolder(SurveyAdapter.ViewHolder holder, int position) {
-        holder.name.setText(source.get(position).getName().length() > 30 ? source.get(position).getName().substring(0, 30) + "..." : source.get(position).getName());
-        holder.desc.setText(source.get(position).getDesc().length() > 40 ? source.get(position).getDesc().substring(0, 40) + "..." : source.get(position).getDesc());
-        try {
-            holder.date.setText(
-                    new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(
-                            source.get(position).getDate())));
-        } catch (ParseException e) {
-            e.printStackTrace();
-            holder.date.setText(source.get(position).getDate());
-        }
+        holder.name.setText(source.get(position).getName());
+        holder.desc.setText(source.get(position).getDesc());
+        holder.date.setText(DateFormat.format("dd/MM/yy", source.get(position).getDate()));
 
 //            holder.no_of_ques.setText(source.get(position).getNoOfQues()+" question(s)");
-        holder.privacy.setText(source.get(position).isPrivacy() ? "Public" : "Private");
+        holder.privacy.setText(source.get(position).isPrivacy() ? "(Public)" : "(Private)");
+        if (source.get(position) instanceof Survey.SurveyQueryResult) {
+            holder.no_of_responses.setText(String.valueOf(((Survey.SurveyQueryResult) source.get(position)).getResponseCount()));
+        }
     }
 
     @Override
@@ -72,7 +69,7 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.ViewHolder
         TextView name;
         TextView desc;
         TextView date;
-        TextView no_of_ques;
+        TextView no_of_responses;
         TextView privacy;
 
         private ViewHolder(View itemView) {
@@ -80,7 +77,7 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.ViewHolder
             name = itemView.findViewById(R.id.name);
             desc = itemView.findViewById(R.id.desc);
             date = itemView.findViewById(R.id.date);
-            //     no_of_ques = (TextView) itemView.findViewById(R.id.no_of_questions);
+            no_of_responses = itemView.findViewById(R.id.no_of_responses);
             privacy = itemView.findViewById(R.id.privacy);
             itemView.setOnClickListener(this);
         }

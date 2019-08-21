@@ -27,7 +27,7 @@
                android:text="search"
                android:layout_gravity="center"
                android:layout_marginLeft="16dp"
-               android:background="@drawable/custom_button"/>
+               android:background="@drawable/form_button" />
        </LinearLayout>
        <ProgressBar
            android:id="@+id/search_progress"

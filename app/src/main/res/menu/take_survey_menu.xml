@@ -2,11 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".features.takesurvey.fragments.AnswerSurvey">
+    tools:context=".features.takesurvey.activities.SurveyAction">
     <item
         android:id="@+id/save_answers"
-        android:icon="@drawable/ic_done_black_24dp"
         android:orderInCategory="100"
-        android:title="SUBMIT"
-        app:showAsAction="always|withText" />
+        android:title="@string/submit"
+        app:showAsAction="withText|always" />
 </menu>

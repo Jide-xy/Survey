@@ -11,6 +11,7 @@ import com.example.babajidemustapha.survey.shared.room.entities.Question;
 import com.example.babajidemustapha.survey.shared.room.entities.ResponseDetail;
 import com.example.babajidemustapha.survey.shared.room.entities.ResponseHeader;
 import com.example.babajidemustapha.survey.shared.room.entities.Survey;
+import com.example.babajidemustapha.survey.shared.room.entities.Survey.SurveyQueryResult;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -183,6 +184,10 @@ public abstract class SurveyDao {
 
     @Query("SELECT * FROM SURVEY")
     public abstract List<Survey> getAllSurveys();
+
+    @Query("SELECT SURVEY.* , COUNT(RESPONSE.OFFLINE_SURVEY_ID) AS responseCount FROM SURVEY LEFT JOIN RESPONSE ON SURVEY.OFFLINE_ID = RESPONSE.OFFLINE_SURVEY_ID " +
+            "GROUP BY SURVEY.OFFLINE_ID")
+    public abstract List<SurveyQueryResult> getAllSurveysWithResponseCount();
 
     @Query("SELECT * FROM SURVEY WHERE ONLINE_ID = :online_id")
     public abstract Survey getSurveyWithOnlineId(int online_id);

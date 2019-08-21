@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#718792</color>
-    <color name="colorPrimaryDark">#1c313a</color>
-    <color name="colorAccent">#d05ce3</color>
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">@color/app_gray</color>
+    <color name="colorAccent">#4285f4</color>
     <color name="textColorBlack">#212121</color>
+    <!--10% app gray-->
+    <color name="edit_text_bg">#1AAFB6C3</color>
+    <color name="divider_color">#4DAFB6C3</color>
+    <color name="app_gray">#AFB6C3</color>
+    <color name="progress_bar_app_gray">#80AFB6C3</color>
+    <color name="login_bg">#fcfcfc</color>
+    <color name="survey_name_color">#001f52</color>
+    <color name="survey_desc_color">#8592a6</color>
+    <color name="clear_red">#ea4335</color>
+    <color name="clear_red_transparent">#33ea4335</color>
 </resources>

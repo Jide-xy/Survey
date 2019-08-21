@@ -8,37 +8,118 @@
     android:fitsSystemWindows="true"
     tools:context="com.example.babajidemustapha.survey.features.takesurvey.activities.SurveyAction">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <Button
+            android:id="@+id/next"
+            style="@style/FormButton"
+            android:layout_width="0dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="40dp"
+            android:drawableEnd="@drawable/ic_arrow_forward_white"
+            android:drawablePadding="20dp"
+            android:gravity="start|center_vertical"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:text="@string/next"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="4"
+            app:layout_constraintStart_toEndOf="@+id/previous" />
+
+        <ImageButton
+            android:id="@+id/previous"
+            style="@style/FormButton"
+            android:layout_width="0dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="40dp"
+
+            android:background="@drawable/white_form_button"
+            android:clickable="true"
+            android:contentDescription="@string/previous"
+            android:elevation="2dp"
+            android:focusable="true"
+            android:scaleType="center"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/next"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/ic_arrow_back_color_accent"
+            tools:visibility="visible" />
+
+        <!--<androidx.cardview.widget.CardView-->
+        <!--android:id="@+id/previous"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginStart="20dp"-->
+        <!--android:layout_marginBottom="40dp"-->
+        <!--android:foreground="?android:selectableItemBackground"-->
+        <!--android:visibility="gone"-->
+        <!--app:cardElevation="2dp"-->
+        <!--android:clickable="true"-->
+        <!--android:focusable="true"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toStartOf="@+id/next"-->
+        <!--app:layout_constraintHorizontal_chainStyle="packed"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintHorizontal_weight="1"-->
+        <!--tools:visibility="visible">-->
+
+        <!--<ImageView-->
+        <!--style="@style/FormButton"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:scaleType="center"-->
+        <!--android:background="@null"-->
+        <!--app:srcCompat="@drawable/ic_arrow_back_color_accent"-->
+        <!--android:contentDescription="@string/previous"/>-->
+        <!--</androidx.cardview.widget.CardView>-->
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/progressBar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:progressBackgroundTint="@color/progress_bar_app_gray"
+            app:layout_constraintEnd_toEndOf="@id/viewPager"
+            app:layout_constraintStart_toStartOf="@id/viewPager"
+            app:layout_constraintTop_toTopOf="@+id/viewPager"
+            tools:progress="25" />
+
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/appbar_padding_top"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.NoActionBar.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/AppTheme.PopupOverlay">
+            style="@style/Base_ToolbarStyle">
 
         </androidx.appcompat.widget.Toolbar>
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabMode="fixed"
-            app:tabGravity="fill"
-            />
     </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -21,7 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.babajidemustapha.survey.R;
-import com.example.babajidemustapha.survey.features.dashboard.activities.MainActivity;
+import com.example.babajidemustapha.survey.features.dashboard.activities.DashboardActivity;
 import com.example.babajidemustapha.survey.shared.room.db.SurveyDatabase;
 import com.example.babajidemustapha.survey.shared.room.entities.Question;
 import com.example.babajidemustapha.survey.shared.room.entities.ResponseDetail;
@@ -78,15 +77,12 @@ public class LoginActivity extends AppCompatActivity  {
         mPasswordView = findViewById(R.id.password);
         mProgressView = findViewById(R.id.login_progress);
         mSignInButton = findViewById(R.id.sign_in_button);
-        mSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        mSignInButton.setOnClickListener(view -> {
 
-              //  mProgressView.setVisibility(View.VISIBLE);
-                attemptLogin();
+            //  mProgressView.setVisibility(View.VISIBLE);
+            attemptLogin();
 
-              //  mProgressView.setVisibility(View.GONE);
-            }
+            //  mProgressView.setVisibility(View.GONE);
         });
 
 
@@ -258,9 +254,9 @@ public class LoginActivity extends AppCompatActivity  {
     }
 
     private void goToDashboard() {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
         startActivity(intent);
-        finish();
+        finishAffinity();
     }
 
     /**
@@ -279,56 +275,6 @@ public class LoginActivity extends AppCompatActivity  {
         editor.apply();
         goToDashboard();
     }
-
-//    private void download() {
-//        JSONObject obj = new JSONObject();
-//        JsonObjectRequest downloadRequest = null;
-//        try {
-//            obj.put("USER_ID", loginData.getInt("USER_ID", 0));
-//            downloadRequest = new JsonObjectRequest(Request.Method.POST, "http://192.168.1.9:64719/survey/download/all",obj,
-//                    new ResponseDetail.Listener<JSONObject>() {
-//                        @Override
-//                        public void onResponse(JSONObject response) {
-//                            try {
-//                                Log.e("response", response.toString());
-//                                if (response.getString("STATUS").equalsIgnoreCase("SUCCESS")) {
-//                                    Log.e("response", "reching here");
-//
-//                                    db.saveSurvey(response.getJSONArray("SURVEYS"));
-//                                    db.saveQuestion(response.getJSONArray("QUESTIONS"));
-//                                    db.saveResponse(response.getJSONArray("RESPONSES"));
-//                                    db.saveResponseDetail(response.getJSONArray("RESPONSE_DETAILS"));
-//
-//                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                                    //   intent.putExtra("username", finalObj.getString("username"));
-//                                    startActivity(intent);
-//                                    finish();
-//                                }
-//                                else if (response.getString("STATUS").equalsIgnoreCase("FAIL")){
-//                                    Log.e("error", response.getString("MESSAGE"));
-//                                }
-//                                else {
-//                                    Log.e("error", "unknown error");
-//                                }
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    },
-//                    new ResponseDetail.ErrorListener() {
-//                        @Override
-//                        public void onErrorResponse(VolleyError error) {
-//                            error.printStackTrace();
-//                        }
-//                    });
-//
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        if (downloadRequest != null){
-//            Volley.newRequestQueue(LoginActivity.this).add(downloadRequest);
-//        }
-//    }
 
     /**
      * Represents an asynchronous login/registration task used to authenticate

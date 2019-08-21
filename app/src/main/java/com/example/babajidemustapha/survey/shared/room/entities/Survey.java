@@ -36,10 +36,13 @@ public class Survey {
     private String username;
 
     @ColumnInfo(name = "DATE_CREATED")
-    private String date;
+    private long date;
 
     @Ignore
     private int no_of_ques;
+
+//    @Ignore
+//    private int responseCount;
 
     @ColumnInfo(name = "DESCRIPTION")
     private String desc;
@@ -54,7 +57,7 @@ public class Survey {
 
     }
 
-    public Survey(int id, String name, boolean privacy, String date, int no_of_ques, String desc){
+    public Survey(int id, String name, boolean privacy, long date, int no_of_ques, String desc) {
         this.id = id;
         this.name = name;
         this.privacy = privacy;
@@ -63,7 +66,8 @@ public class Survey {
         this.desc = desc;
         questions = new ArrayList<>();
     }
-    public Survey(int id, String name, String date,String desc,String username, String device_token){
+
+    public Survey(int id, String name, long date, String desc, String username, String device_token) {
         this.id = id;
         this.name = name;
         this.username = username;
@@ -109,11 +113,11 @@ public class Survey {
         this.username = username;
     }
 
-    public String getDate() {
+    public long getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(long date) {
         this.date = date;
     }
 
@@ -163,5 +167,26 @@ public class Survey {
 
     public void setSynced(boolean synced) {
         this.synced = synced;
+    }
+
+//    public int getResponseCount() {
+//        return responseCount;
+//    }
+//
+//    public void setResponseCount(int responseCount) {
+//        this.responseCount = responseCount;
+//    }
+
+    public static class SurveyQueryResult extends Survey {
+
+        private int responseCount;
+
+        public int getResponseCount() {
+            return responseCount;
+        }
+
+        public void setResponseCount(int responseCount) {
+            this.responseCount = responseCount;
+        }
     }
 }

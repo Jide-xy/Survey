@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheckBox xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="20dp"
+    android:background="@drawable/bg_radio_button"
+    android:button="@drawable/radio_button"
+    android:paddingStart="10dp"
+    android:paddingTop="15dp"
+    android:paddingEnd="10dp"
+    android:paddingBottom="15dp"
+    android:textColor="@color/radio_text_selector"
+    tools:checked="true"
+    tools:text="@string/action_settings">
+
+</CheckBox>

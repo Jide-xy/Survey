@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingStart="20dp"
+    android:paddingTop="80dp"
+    android:paddingEnd="20dp">
+
+    <EditText
+        android:id="@+id/question_answer_short_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="130dp"
+        android:gravity="top"
+        android:hint="@string/enter_answer"
+        android:lines="1"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@id/question_text"
+        app:layout_constraintTop_toBottomOf="@id/question_text"
+        tools:visibility="visible" />
+
+    <EditText
+        android:id="@+id/question_answer_long_text"
+        style="@style/FormEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="130dp"
+        android:background="@drawable/edit_text_bg"
+        android:gravity="top"
+        android:hint="@string/enter_answer"
+        android:lines="10"
+        android:padding="10dp"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@id/question_text"
+        app:layout_constraintTop_toBottomOf="@id/question_text"
+        tools:visibility="visible" />
+
+    <RadioGroup
+        android:id="@+id/question_options_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="130dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@id/question_text"
+        app:layout_constraintTop_toBottomOf="@+id/question_text"
+        tools:visibility="visible">
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/question_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/survey_desc_color"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Question 1" />
+
+    <TextView
+        android:id="@+id/compulsory_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="*"
+        android:textColor="@color/colorAccent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/question_no"
+        app:layout_constraintStart_toEndOf="@id/question_no"
+        app:layout_constraintTop_toTopOf="@id/question_no"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/question_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/survey_name_color"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="@id/question_no"
+        app:layout_constraintTop_toBottomOf="@id/question_no"
+        tools:text="@string/long_text" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

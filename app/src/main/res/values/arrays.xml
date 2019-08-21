@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="feature_images">
+        <item>@drawable/ic_access_to_polls</item>
+        <item>@drawable/ic_variety_question_types</item>
+        <item>@drawable/ic_verified_surveys</item>
+        <item>@drawable/ic_make_money</item>
+    </integer-array>
+
+    <string-array name="feature_details">
+        <item>@string/long_text</item>
+        <item>@string/long_text</item>
+        <item>@string/long_text</item>
+        <item>@string/long_text</item>
+    </string-array>
+
+    <string-array name="feature_headers">
+        <item>@string/access_to_polls</item>
+        <item>@string/variety_of_questions</item>
+        <item>@string/verified_surveys</item>
+        <item>@string/make_money</item>
+    </string-array>
+
+</resources>

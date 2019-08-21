@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.babajidemustapha.survey.R;
 import com.example.babajidemustapha.survey.features.takesurvey.activities.SurveyAction;
+import com.example.babajidemustapha.survey.shared.models.QuestionType;
 import com.example.babajidemustapha.survey.shared.room.entities.Question;
 import com.example.babajidemustapha.survey.shared.room.entities.Survey;
 
@@ -38,8 +40,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,14 +110,14 @@ public class SearchSurvey extends Fragment {
         List<Survey> result = new ArrayList<>();
         for(int i = 0; i< object.getJSONArray("SURVEYS").length();i++){
             JSONObject object1 = object.getJSONArray("SURVEYS").getJSONObject(i);
-           Survey survey = new Survey(object1.getInt("ID"),object1.getString("SURVEY_NAME"),object1.getString("DATE_CREATED"),object1.getString("DESCRIPTION"),
+            Survey survey = new Survey(object1.getInt("ID"), object1.getString("SURVEY_NAME"), object1.getLong("DATE_CREATED"), object1.getString("DESCRIPTION"),
                    object1.getString("USERNAME"),object1.getString("DEVICE_TOKEN"));
             int ques_no = 0;
             for(int j = 0; j< object.getJSONArray("QUESTIONS").length();j++){
                 if(object.getJSONArray("QUESTIONS").getJSONObject(j).getInt("SURVEY_ID") == object1.getInt("ID")){
                     ques_no++;
                     JSONObject object2 = object.getJSONArray("QUESTIONS").getJSONObject(j);
-                    Question question = new Question(object2.getInt("QUESTION_ID"),object2.getInt("QUESTION_NO"),object2.getString("QUESTION_TYPE"),object2.getInt("SURVEY_ID"),
+                    Question question = new Question(object2.getInt("QUESTION_ID"), object2.getInt("QUESTION_NO"), QuestionType.valueOf(object2.getString("QUESTION_TYPE")), object2.getInt("SURVEY_ID"),
                             new JSONArray(object2.getString("QUESTION_OPTIONS")), object2.getBoolean("MANDATORY"),object2.getString("QUESTION_TEXT"));
                     survey.addQuestion(question);
                 }
@@ -197,12 +197,7 @@ public class SearchSurvey extends Fragment {
         public void onBindViewHolder(ViewHolder holder, int position) {
             holder.name.setText(source.get(position).getName().length() >30 ? source.get(position).getName().substring(0,30)+"...":source.get(position).getName());
             holder.desc.setText(source.get(position).getDesc().length() > 40 ? source.get(position).getDesc().substring(0,40)+"..." : source.get(position).getDesc());
-            holder.date.setText(source.get(position).getDate());
-            try {
-                holder.date.setText(new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(source.get(position).getDate())));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            holder.date.setText(DateFormat.format("yyyy-MM-dd", source.get(position).getDate()));
 
 //            holder.no_of_ques.setText(source.get(position).getNoOfQues()+" question(s)");
             holder.privacy.setText(source.get(position).isPrivacy() ? "Public" : "Private");

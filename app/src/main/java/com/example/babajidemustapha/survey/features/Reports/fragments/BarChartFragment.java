@@ -105,11 +105,11 @@ public class BarChartFragment extends Fragment {
         for (Map.Entry<Question, List<ResponseDetail>> x : report.entrySet()) {
             Log.e("question NO: ", x.getKey().getQuestionNo()+"");
             switch (x.getKey().getQuestionType()){
-                case "TEXT":
+                case SHORT_TEXT:
                     xyCoord.put(x.getKey(),null);
                     questions.add(x.getKey());
                     break;
-                case "SINGLE":
+                case SINGLE_OPTION:
                     Map<String,Integer> xy = new LinkedHashMap<>();
                     for(int i = 0;i<x.getKey().getOptions().size();i++){
                         xy.put(x.getKey().getOptions().get(i),0);
@@ -127,7 +127,7 @@ public class BarChartFragment extends Fragment {
                     xyCoord.put(x.getKey(),xy);
                     questions.add(x.getKey());
                     break;
-                case "MULTI":
+                case MULTIPLE_OPTION:
                     Map<String,Integer> xy1 = new LinkedHashMap<>();
                     for(int i = 0;i<x.getKey().getOptions().size();i++){
                         xy1.put(x.getKey().getOptions().get(i),0);
@@ -179,7 +179,7 @@ public class BarChartFragment extends Fragment {
             holder.qu_no.setText( source.get(position).getQuestionNo()+"");
             holder.qu_text.setText(source.get(position).getQuestionText());
             switch(source.get(position).getQuestionType()){
-                case "TEXT":
+                case SHORT_TEXT:
                     holder.barChart.setNoDataText("Bar Chart not available for this question type");
                     holder.btn.setVisibility(View.GONE);
                     break;

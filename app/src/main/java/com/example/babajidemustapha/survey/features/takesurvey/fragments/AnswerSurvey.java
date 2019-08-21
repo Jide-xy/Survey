@@ -46,9 +46,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -152,19 +151,19 @@ public class AnswerSurvey extends Fragment {
         for(int i = 0; i<questions.size(); i++) {
             if (questions.get(i).isMandatory()) {
                 switch (questions.get(i).getQuestionType()) {
-                    case "TEXT":
+                    case SHORT_TEXT:
                         EditText ans = rootView.findViewWithTag(questions.get(i).getQuestionNo());
                         if (ans.getText().toString().isEmpty()){
                             return false;
                         }
                         break;
-                    case "SINGLE":
+                    case SINGLE_OPTION:
                         RadioGroup radioGroup = rootView.findViewWithTag("rg" + questions.get(i).getQuestionNo());
                         if(radioGroup.getCheckedRadioButtonId() == -1){
                             return false;
                         }
                         break;
-                    case "MULTI":
+                    case MULTIPLE_OPTION:
                         Question question = questions.get(i);
                         for(int j = 0 ; j < question.getOptionCount(); j++ ){
                             CheckBox cb = rootView.findViewWithTag("qu" + question.getQuestionNo() + "op" + j);
@@ -184,7 +183,7 @@ public class AnswerSurvey extends Fragment {
         for(int i = 0; i<questions.size(); i++) {
             Question question = questions.get(i);
             switch (question.getQuestionType()) {
-                case "TEXT":
+                case SHORT_TEXT:
                     EditText ans = rootView.findViewWithTag(question.getQuestionNo());
                     if (!ans.getText().toString().isEmpty()){
                         // question.setAnswer(ans.getText().toString());
@@ -194,7 +193,7 @@ public class AnswerSurvey extends Fragment {
                         responseDetails.add(new ResponseDetail(question.getId(), ""));
                     }
                     break;
-                case "SINGLE":
+                case SINGLE_OPTION:
                     RadioGroup radioGroup = rootView.findViewWithTag("rg" + question.getQuestionNo());
                     if(radioGroup.getCheckedRadioButtonId() != -1){
                         RadioButton radioButton = rootView.findViewById(radioGroup.getCheckedRadioButtonId());
@@ -205,7 +204,7 @@ public class AnswerSurvey extends Fragment {
                         responseDetails.add(new ResponseDetail(question.getId(), ""));
                     }
                     break;
-                case "MULTI":
+                case MULTIPLE_OPTION:
                     List<String> cbList = new ArrayList<>();
                     for(int j = 0 ; j < question.getOptionCount(); j++ ){
                         CheckBox cb = rootView.findViewWithTag("qu" + question.getQuestionNo() + "op" + j);
@@ -225,7 +224,7 @@ public class AnswerSurvey extends Fragment {
         return responseDetails;
     }
     public ResponseHeader buildResponseHeader(){
-        ResponseHeader header = new ResponseHeader(survey_id , name.getText().toString(), new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()));
+        ResponseHeader header = new ResponseHeader(survey_id, name.getText().toString(), Calendar.getInstance().getTimeInMillis());
         return header;
     }
     public void storeResponse(List<Question> questions){
@@ -344,13 +343,13 @@ public class AnswerSurvey extends Fragment {
 //        }
         ll.addView(subll);
         switch (question.getQuestionType()){
-            case "TEXT":
+            case SHORT_TEXT:
                 EditText ans = new EditText(getContext());
                 ans.setHint("Enter answer here");
                 ans.setTag(question.getQuestionNo());
                 ll.addView(ans);
                 break;
-            case "SINGLE":
+            case SINGLE_OPTION:
                 RadioGroup radioGroup = new RadioGroup(getContext());
                 radioGroup.setTag("rg"+ question.getQuestionNo());
                 List<String> options = question.getOptions();
@@ -362,7 +361,7 @@ public class AnswerSurvey extends Fragment {
                 }
                 ll.addView(radioGroup);
                 break;
-            case "MULTI":
+            case MULTIPLE_OPTION:
                 LinearLayout llcb = new LinearLayout(getContext());
                 llcb.setOrientation(LinearLayout.VERTICAL);
                 llcb.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));

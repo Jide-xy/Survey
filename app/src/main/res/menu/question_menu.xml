@@ -4,6 +4,6 @@
     <item
         android:id="@+id/save"
         android:orderInCategory="100"
-        android:title="SUBMIT"
+        android:title="Done"
         app:showAsAction="always" />
 </menu>

@@ -1,0 +1,350 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 3,
+    "identityHash": "c233244622c7f35a5410d1902e8e5291",
+    "entities": [
+      {
+        "tableName": "QUESTION",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`OFFLINE_ID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `ONLINE_ID` INTEGER NOT NULL, `Q_NO` INTEGER NOT NULL, `Q_TYPE` TEXT, `OFFLINE_SURVEY_ID` INTEGER NOT NULL, `ONLINE_SURVEY_ID` INTEGER NOT NULL, `OPTIONS` TEXT, `MANDATORY` INTEGER NOT NULL, `Q_TEXT` TEXT, `SYNCED` INTEGER NOT NULL, FOREIGN KEY(`OFFLINE_SURVEY_ID`) REFERENCES `SURVEY`(`OFFLINE_ID`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "OFFLINE_ID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "online_id",
+            "columnName": "ONLINE_ID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "questionNo",
+            "columnName": "Q_NO",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "questionType",
+            "columnName": "Q_TYPE",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "surveyID",
+            "columnName": "OFFLINE_SURVEY_ID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "onlineSurveyID",
+            "columnName": "ONLINE_SURVEY_ID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "options",
+            "columnName": "OPTIONS",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mandatory",
+            "columnName": "MANDATORY",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "questionText",
+            "columnName": "Q_TEXT",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "synced",
+            "columnName": "SYNCED",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "OFFLINE_ID"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_QUESTION_OFFLINE_SURVEY_ID",
+            "unique": false,
+            "columnNames": [
+              "OFFLINE_SURVEY_ID"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_QUESTION_OFFLINE_SURVEY_ID` ON `${TABLE_NAME}` (`OFFLINE_SURVEY_ID`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "SURVEY",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "OFFLINE_SURVEY_ID"
+            ],
+            "referencedColumns": [
+              "OFFLINE_ID"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "RESPONSE_DETAIL",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`OFFLINE_RES_DETAIL_ID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `ONLINE_RES_DETAIL_ID` INTEGER NOT NULL, `OFFLINE_RESPONSE_ID` INTEGER NOT NULL, `ONLINE_RESPONSE_ID` INTEGER NOT NULL, `OFFLINE_QUESTION_ID` INTEGER NOT NULL, `ONLINE_QUESTION_ID` INTEGER NOT NULL, `RESPONSE` TEXT, `SYNCED` INTEGER NOT NULL, FOREIGN KEY(`OFFLINE_QUESTION_ID`) REFERENCES `QUESTION`(`OFFLINE_ID`) ON UPDATE NO ACTION ON DELETE NO ACTION , FOREIGN KEY(`OFFLINE_RESPONSE_ID`) REFERENCES `RESPONSE`(`OFFLINE_ID`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "OFFLINE_RES_DETAIL_ID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "online_id",
+            "columnName": "ONLINE_RES_DETAIL_ID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "response_id",
+            "columnName": "OFFLINE_RESPONSE_ID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "online_response_id",
+            "columnName": "ONLINE_RESPONSE_ID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "question_id",
+            "columnName": "OFFLINE_QUESTION_ID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "online_question_id",
+            "columnName": "ONLINE_QUESTION_ID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "response",
+            "columnName": "RESPONSE",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "synced",
+            "columnName": "SYNCED",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "OFFLINE_RES_DETAIL_ID"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_RESPONSE_DETAIL_OFFLINE_RESPONSE_ID",
+            "unique": false,
+            "columnNames": [
+              "OFFLINE_RESPONSE_ID"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_RESPONSE_DETAIL_OFFLINE_RESPONSE_ID` ON `${TABLE_NAME}` (`OFFLINE_RESPONSE_ID`)"
+          },
+          {
+            "name": "index_RESPONSE_DETAIL_OFFLINE_QUESTION_ID",
+            "unique": false,
+            "columnNames": [
+              "OFFLINE_QUESTION_ID"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_RESPONSE_DETAIL_OFFLINE_QUESTION_ID` ON `${TABLE_NAME}` (`OFFLINE_QUESTION_ID`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "QUESTION",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "OFFLINE_QUESTION_ID"
+            ],
+            "referencedColumns": [
+              "OFFLINE_ID"
+            ]
+          },
+          {
+            "table": "RESPONSE",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "OFFLINE_RESPONSE_ID"
+            ],
+            "referencedColumns": [
+              "OFFLINE_ID"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "RESPONSE",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`OFFLINE_ID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `ONLINE_ID` INTEGER NOT NULL, `RESPONDENT_NAME` TEXT, `RESPONSE_DATE` INTEGER NOT NULL, `SYNCED` INTEGER NOT NULL, `OFFLINE_SURVEY_ID` INTEGER NOT NULL, `ONLINE_SURVEY_ID` INTEGER NOT NULL, FOREIGN KEY(`OFFLINE_SURVEY_ID`) REFERENCES `SURVEY`(`OFFLINE_ID`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "response_id",
+            "columnName": "OFFLINE_ID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "online_response_id",
+            "columnName": "ONLINE_ID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "respondentName",
+            "columnName": "RESPONDENT_NAME",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "RESPONSE_DATE",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "synced",
+            "columnName": "SYNCED",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "survey_id",
+            "columnName": "OFFLINE_SURVEY_ID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "online_survey_id",
+            "columnName": "ONLINE_SURVEY_ID",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "OFFLINE_ID"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_RESPONSE_OFFLINE_SURVEY_ID",
+            "unique": false,
+            "columnNames": [
+              "OFFLINE_SURVEY_ID"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_RESPONSE_OFFLINE_SURVEY_ID` ON `${TABLE_NAME}` (`OFFLINE_SURVEY_ID`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "SURVEY",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "OFFLINE_SURVEY_ID"
+            ],
+            "referencedColumns": [
+              "OFFLINE_ID"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "SURVEY",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`OFFLINE_ID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `ONLINE_ID` INTEGER NOT NULL, `NAME` TEXT, `PRIVACY` INTEGER NOT NULL, `SYNCED` INTEGER NOT NULL, `USERNAME` TEXT, `DATE_CREATED` INTEGER NOT NULL, `DESCRIPTION` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "OFFLINE_ID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "onlineId",
+            "columnName": "ONLINE_ID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "NAME",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "privacy",
+            "columnName": "PRIVACY",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "synced",
+            "columnName": "SYNCED",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "username",
+            "columnName": "USERNAME",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "DATE_CREATED",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "desc",
+            "columnName": "DESCRIPTION",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "OFFLINE_ID"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c233244622c7f35a5410d1902e8e5291')"
+    ]
+  }
+}

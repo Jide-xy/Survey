@@ -10,4 +10,5 @@ public class Constants {
     public static final String EMAIL = "EMAIL";
     public static final String PHONE_NUMBER = "PHONE_NUMBER";
     public static final String IS_GUEST = "IS_GUEST";
+    public static final String IS_FIRST_LOGIN = "IS_FIRST_LOGIN";
 }
