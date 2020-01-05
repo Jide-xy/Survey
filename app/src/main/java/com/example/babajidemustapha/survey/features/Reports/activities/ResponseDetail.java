@@ -22,8 +22,10 @@ import androidx.cardview.widget.CardView;
 
 import com.example.babajidemustapha.survey.R;
 import com.example.babajidemustapha.survey.shared.models.QuestionAndResponse;
+import com.example.babajidemustapha.survey.shared.models.Reactions;
 import com.example.babajidemustapha.survey.shared.room.db.SurveyDatabase;
 import com.example.babajidemustapha.survey.shared.utils.DbOperationHelper;
+import com.example.babajidemustapha.survey.shared.views.ReactionsViewGroup;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -66,9 +68,9 @@ public class ResponseDetail extends AppCompatActivity {
          CardView cardview = new CardView(this);
         CardView.LayoutParams layoutParams = new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT,CardView.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(0,
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics()),
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics()),
                 0,
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics()));
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics()));
         cardview.setLayoutParams(layoutParams);
         LinearLayout ll = new LinearLayout(this);
         ll.setOrientation(LinearLayout.VERTICAL);
@@ -105,6 +107,7 @@ public class ResponseDetail extends AppCompatActivity {
         ll.addView(subll);
         switch (question.getQuestionType()){
             case SHORT_TEXT:
+            case LONG_TEXT:
                 TextView ans = new TextView(this);
                 ans.setTag(question.getQuestionNo());
                 ans.setText("Answer: "+ question.getResponse());
@@ -125,6 +128,15 @@ public class ResponseDetail extends AppCompatActivity {
                     radioGroup.addView(opt);
                 }
                 ll.addView(radioGroup);
+                break;
+            case REACTIONS:
+                ReactionsViewGroup reactionsViewGroup = new ReactionsViewGroup(this);
+                reactionsViewGroup.setTag("rg" + question.getQuestionNo());
+                if (question.getResponse() != null && !question.getResponse().isEmpty()) {
+                    reactionsViewGroup.check(Reactions.valueOf(question.getResponse()).getReactionViewId());
+                }
+                reactionsViewGroup.disableAllButtons();
+                ll.addView(reactionsViewGroup);
                 break;
             case MULTIPLE_OPTION:
                 LinearLayout llcb = new LinearLayout(this);
@@ -164,6 +176,7 @@ public class ResponseDetail extends AppCompatActivity {
         return cardview;
     }
     public void buildQuestions(List<QuestionAndResponse> questions, ViewGroup view){
+        view.setClipToPadding(false);
         for(int i = 0; i< questions.size(); i++){
             view.addView(buildQuestion(questions.get(i)));
         }

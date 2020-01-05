@@ -120,10 +120,10 @@ class SurveyAction : AppCompatActivity(), AnswerQuestionFragment.OnQuestionSelec
 
     }
 
-    fun validate(): Boolean {
+    private fun validate(): Boolean {
         for ((index, question) in questions.withIndex()) {
             when (question.questionType) {
-                QuestionType.SHORT_TEXT, QuestionType.LONG_TEXT, QuestionType.SINGLE_OPTION, QuestionType.MULTIPLE_OPTION -> {
+                QuestionType.SHORT_TEXT, QuestionType.LONG_TEXT, QuestionType.SINGLE_OPTION, QuestionType.MULTIPLE_OPTION, QuestionType.REACTIONS -> {
                     if (question.questionResponse?.response.isNullOrEmpty() && question.isMandatory) {
                         viewPager.setCurrentItem(index, false)
                         Toast.makeText(this, "One or more mandatory questions have not been answered.", Toast.LENGTH_LONG).show()
@@ -131,7 +131,6 @@ class SurveyAction : AppCompatActivity(), AnswerQuestionFragment.OnQuestionSelec
                     }
                 }
                 QuestionType.IMAGES -> TODO()
-                QuestionType.REACTIONS -> TODO()
                 else -> return false
             }
         }
@@ -139,7 +138,9 @@ class SurveyAction : AppCompatActivity(), AnswerQuestionFragment.OnQuestionSelec
     }
 
     private fun storeResponse() {
-        val responseDetails: List<ResponseDetail> = questions.map { it.questionResponse }
+        val responseDetails: List<ResponseDetail> = questions.map {
+            it.questionResponse ?: ResponseDetail(it.id, null)
+        }
         DbOperationHelper.execute(object : DbOperationHelper.IDbOperationHelper<Unit> {
             override fun run() {
                 db.responseHeaderDao().saveResponse(ResponseHeader(survey_id, null, Calendar.getInstance().timeInMillis), responseDetails)
@@ -157,13 +158,12 @@ class SurveyAction : AppCompatActivity(), AnswerQuestionFragment.OnQuestionSelec
         var count = 0
         forloop@ for (question in questions) {
             when (question.questionType) {
-                QuestionType.SHORT_TEXT, QuestionType.LONG_TEXT, QuestionType.SINGLE_OPTION, QuestionType.MULTIPLE_OPTION -> {
+                QuestionType.SHORT_TEXT, QuestionType.LONG_TEXT, QuestionType.SINGLE_OPTION, QuestionType.MULTIPLE_OPTION, QuestionType.REACTIONS -> {
                     if (question.questionResponse?.response.isNullOrEmpty()) {
                         continue@forloop
                     }
                 }
                 QuestionType.IMAGES -> TODO()
-                QuestionType.REACTIONS -> TODO()
                 else -> {
                 }
             }

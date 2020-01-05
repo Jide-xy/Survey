@@ -2,16 +2,15 @@ package com.example.babajidemustapha.survey.features.newsurvey.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.example.babajidemustapha.survey.R
 import com.example.babajidemustapha.survey.features.newsurvey.adapters.QuestionTypeAdapter
 import com.example.babajidemustapha.survey.features.newsurvey.adapters.QuestionTypeAdapter.QuestionTypeInteractionListener
 import com.example.babajidemustapha.survey.shared.models.QuestionType
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.dialog_question_type.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -28,11 +27,7 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  *
  */
-class QuestionTypeDialogFragment : DialogFragment(), QuestionTypeInteractionListener {
-    override fun onStart() {
-        super.onStart()
-        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-    }
+class QuestionTypeDialogFragment : BottomSheetDialogFragment(), QuestionTypeInteractionListener {
 
     override fun onSelectQuestionType(questionType: QuestionType) {
         listener?.onSelectQuestionType(questionType)
@@ -44,7 +39,7 @@ class QuestionTypeDialogFragment : DialogFragment(), QuestionTypeInteractionList
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-        dialog?.window?.setGravity(Gravity.BOTTOM)
+//        dialog?.window?.setGravity(Gravity.BOTTOM)
         return inflater.inflate(R.layout.dialog_question_type, container, false)
     }
 

@@ -4,14 +4,21 @@
     <color name="colorPrimaryDark">@color/app_gray</color>
     <color name="colorAccent">#4285f4</color>
     <color name="textColorBlack">#212121</color>
+    <color name="colorAccentDisabled">#774285f4</color>
+    <!--    App Gray Variants Region-->
     <!--10% app gray-->
     <color name="edit_text_bg">#1AAFB6C3</color>
     <color name="divider_color">#4DAFB6C3</color>
     <color name="app_gray">#AFB6C3</color>
     <color name="progress_bar_app_gray">#80AFB6C3</color>
+    <color name="twenty_percent_app_gray">#33AFB6C3</color>
+    <!--    endregion-->
     <color name="login_bg">#fcfcfc</color>
     <color name="survey_name_color">#001f52</color>
     <color name="survey_desc_color">#8592a6</color>
+    <color name="survey_name_color_disabled">#1A001f52</color>
+    <color name="survey_desc_color_disabled">#1A8592a6</color>
     <color name="clear_red">#ea4335</color>
     <color name="clear_red_transparent">#33ea4335</color>
+    <color name="edit_text_bg_stroke">#1A5e697c</color>
 </resources>

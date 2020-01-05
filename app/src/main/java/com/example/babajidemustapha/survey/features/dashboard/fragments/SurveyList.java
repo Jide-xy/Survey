@@ -9,11 +9,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,7 +51,7 @@ public class SurveyList extends Fragment implements SurveyAdapter.SurveyActionLi
     private SurveyDatabase db;
     private SurveyAdapter adapter1;
     private RecyclerView recyclerView;
-    private TextView placeholder;
+    private CardView placeholder;
     private List<? extends Survey> surveys;
     private FloatingActionButton fab;
 
@@ -166,6 +166,10 @@ public class SurveyList extends Fragment implements SurveyAdapter.SurveyActionLi
         surveys = new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         fab.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), QuestionsSetupActivity.class);
+            startActivity(intent);
+        });
+        placeholder.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), QuestionsSetupActivity.class);
             startActivity(intent);
         });

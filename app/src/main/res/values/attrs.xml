@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ReactionsImageView">
+        <attr name="reactionType" format="enum">
+            <enum name="very_happy" value="0" />
+            <enum name="happy" value="1" />
+            <enum name="indifferent" value="2" />
+            <enum name="sad" value="3" />
+        </attr>
+    </declare-styleable>
+</resources>

@@ -20,7 +20,8 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="40dp"
-            android:drawableEnd="@drawable/ic_arrow_forward_white"
+            app:icon="@drawable/ic_arrow_forward_white"
+            app:iconGravity="end"
             android:drawablePadding="20dp"
             android:gravity="start|center_vertical"
             android:paddingStart="20dp"
@@ -32,26 +33,25 @@
             app:layout_constraintHorizontal_weight="4"
             app:layout_constraintStart_toEndOf="@+id/previous" />
 
-        <ImageButton
+        <Button
             android:id="@+id/previous"
             style="@style/FormButton"
             android:layout_width="0dp"
             android:layout_marginStart="20dp"
             android:layout_marginBottom="40dp"
-
-            android:background="@drawable/white_form_button"
-            android:clickable="true"
+            android:textColor="@color/colorAccent"
             android:contentDescription="@string/previous"
-            android:elevation="2dp"
-            android:focusable="true"
-            android:scaleType="center"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/next"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/ic_arrow_back_color_accent"
+            app:backgroundTint="@color/form_button_white_bg"
+            app:icon="@drawable/ic_arrow_back_color_accent"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:iconTint="@color/colorAccent"
             tools:visibility="visible" />
 
         <!--<androidx.cardview.widget.CardView-->

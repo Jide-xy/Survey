@@ -5,6 +5,6 @@ import android.util.TypedValue;
 
 public class Utils {
     public static int pxToDp(Resources resources, int px) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, resources.getDisplayMetrics());
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, px, resources.getDisplayMetrics());
     }
 }

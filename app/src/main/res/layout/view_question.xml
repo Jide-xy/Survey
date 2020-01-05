@@ -50,6 +50,17 @@
 
     </RadioGroup>
 
+    <com.example.babajidemustapha.survey.shared.views.ReactionsViewGroup
+        android:id="@+id/reactionsLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="130dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/question_text"
+        app:layout_constraintStart_toStartOf="@+id/question_text"
+        app:layout_constraintTop_toBottomOf="@+id/question_text"
+        tools:visibility="visible" />
+
     <TextView
         android:id="@+id/question_no"
         android:layout_width="wrap_content"
@@ -64,7 +75,7 @@
         android:id="@+id/compulsory_indicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="*"
+        android:text="@string/asterisk"
         android:textColor="@color/colorAccent"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/question_no"
@@ -74,12 +85,13 @@
 
     <TextView
         android:id="@+id/question_text"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:textColor="@color/survey_name_color"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="@id/question_no"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/question_no"
         tools:text="@string/long_text" />
 

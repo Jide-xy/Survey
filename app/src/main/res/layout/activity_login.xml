@@ -159,14 +159,14 @@
                 style="@style/FormTextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_marginTop="60dp"
+                android:hint="@string/username"
                 app:layout_constraintTop_toBottomOf="@+id/login">
 
-                <EditText
-                    android:id="@+id/username"
+                <com.google.android.material.textfield.TextInputEditText
                     style="@style/FormEditText"
+                    android:id="@+id/username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/username"
                     android:inputType="text"
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -177,14 +177,14 @@
                 style="@style/FormTextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_marginTop="30dp"
+                android:hint="@string/password"
                 app:layout_constraintTop_toBottomOf="@+id/username_layout">
 
-                <EditText
-                    android:id="@+id/password"
+                <com.google.android.material.textfield.TextInputEditText
                     style="@style/FormEditText"
+                    android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/password"
                     android:inputType="textPassword"
                     android:maxLines="1" />
 

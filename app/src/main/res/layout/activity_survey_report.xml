@@ -17,10 +17,7 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-            android:layout_width="match_parent"
             style="@style/Base_ToolbarStyle"
-            android:background="@null"
-            android:elevation="0dp"
             app:layout_scrollFlags="scroll|enterAlways">
 
         </androidx.appcompat.widget.Toolbar>
@@ -29,6 +26,10 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/colorAccent"
+            app:tabIndicatorFullWidth="true"
+            app:tabMode="auto"
             app:tabRippleColor="@color/app_gray"
             app:tabSelectedTextColor="@color/colorAccent"
             app:tabTextColor="@color/app_gray" />

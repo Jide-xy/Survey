@@ -21,6 +21,9 @@ import kotlinx.android.synthetic.main.activity_dashboard.*
 import org.json.JSONObject
 
 class DashboardActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener, SurveyList.OnNavigationMenuSelected {
+    override fun setTitle(title: String?) {
+
+    }
 
     private lateinit var textMessage: TextView
     lateinit var db: SurveyDatabase

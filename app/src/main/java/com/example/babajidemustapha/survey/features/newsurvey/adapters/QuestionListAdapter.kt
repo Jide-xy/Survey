@@ -15,6 +15,7 @@ import com.example.babajidemustapha.survey.shared.room.entities.Question
 class QuestionListAdapter(private val listener: QuestionsSetupInteractionListener) : RecyclerView.Adapter<QuestionListAdapter.ViewHolder>() {
 
     private val questions: MutableList<Question> = mutableListOf()
+
     override fun onViewRecycled(holder: ViewHolder) {
         super.onViewRecycled(holder)
         holder.unbind()
@@ -35,6 +36,13 @@ class QuestionListAdapter(private val listener: QuestionsSetupInteractionListene
     fun addQuestion(questionType: QuestionType) {
         val question = Question()
         question.questionType = questionType
+        when (questionType) {
+            SINGLE_OPTION, MULTIPLE_OPTION -> {
+                //add two options by default
+                question.addOption("")
+                question.addOption("")
+            }
+        }
         questions.add(question)
 //        if(questions.size == 1) notifyDataSetChanged() else
         notifyItemInserted(questions.size - 1)

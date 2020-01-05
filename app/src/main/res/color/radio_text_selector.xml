@@ -2,7 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:color="@color/survey_name_color" android:state_checked="true" android:state_enabled="true" />
     <item android:color="@color/survey_desc_color" android:state_checked="false" android:state_enabled="true" />
-    <item android:color="@color/survey_name_color" android:state_checked="true" android:state_enabled="false" />
-    <item android:color="@color/survey_desc_color" android:state_checked="false" android:state_enabled="false" />
+    <item android:color="@color/survey_name_color_disabled" android:state_checked="true" android:state_enabled="false" />
+    <item android:color="@color/survey_desc_color_disabled" android:state_checked="false" android:state_enabled="false" />
     <item android:color="@color/survey_desc_color" />
 </selector>

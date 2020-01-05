@@ -4,22 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="bottom"
-    android:layout_margin="5dp">
+    android:layout_gravity="bottom">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/questionTypeList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/login_bg"
-        android:paddingStart="10dp"
+        android:clipToPadding="false"
         android:paddingTop="15dp"
-        android:paddingEnd="10dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:spanCount="3"
         tools:itemCount="6"
+        android:paddingStart="15dp"
         tools:listitem="@layout/view_question_type" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

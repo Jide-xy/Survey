@@ -91,4 +91,12 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="submit">SUBMIT</string>
+    <string name="cont">CONTINUE</string>
+    <string name="publicc">Public</string>
+    <string name="add_a_brief_description">Add a brief description</string>
+    <string name="give_your_survey_a_name">Give your survey a name</string>
+    <string name="add_picture_logo">Add picture/logo</string>
+    <string name="start_creating_surveys">Start creating surveys</string>
+    <string name="you_are_yet_to_create_a_survey">You are yet to create a survey.</string>
+    <string name="asterisk">\*</string>
 </resources>

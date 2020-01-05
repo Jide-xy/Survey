@@ -115,7 +115,7 @@ public class BarChartFragment extends Fragment {
                         xy.put(x.getKey().getOptions().get(i),0);
                     }
                     for (ResponseDetail responseDetail : x.getValue()) {
-                        if (!responseDetail.getResponse().trim().isEmpty()) {
+                        if (responseDetail.getResponse() != null && !responseDetail.getResponse().trim().isEmpty()) {
                             if (xy.containsKey(responseDetail.getResponse())) {
                                 int i = xy.get(responseDetail.getResponse()) + 1;
                                 xy.put(responseDetail.getResponse(), i);

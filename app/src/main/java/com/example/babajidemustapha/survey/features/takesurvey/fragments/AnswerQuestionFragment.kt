@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.babajidemustapha.survey.R
+import com.example.babajidemustapha.survey.shared.models.Reactions
 import com.example.babajidemustapha.survey.shared.room.entities.Question
 import com.example.babajidemustapha.survey.shared.room.entities.ResponseDetail
 import com.example.babajidemustapha.survey.shared.views.QuestionView
@@ -28,6 +29,12 @@ private const val ARG_PARAM2 = "param2"
  *
  */
 class AnswerQuestionFragment : Fragment(), QuestionView.OnResponseProvidedListener {
+    override fun onReactionSelectResponse(reaction: Reactions) {
+        val question = listener?.onQuestionSelected(questionIndex)
+        question?.questionResponse = ResponseDetail(question!!.id, reaction.name)
+        listener?.updateProgress()
+    }
+
     override fun onTextResponse(response: String) {
         val question = listener?.onQuestionSelected(questionIndex)
         question?.questionResponse = ResponseDetail(question!!.id, response)

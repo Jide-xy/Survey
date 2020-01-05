@@ -12,10 +12,15 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.babajidemustapha.survey.R
 import com.example.babajidemustapha.survey.shared.models.QuestionType
 import com.example.babajidemustapha.survey.shared.models.QuestionType.*
+import com.example.babajidemustapha.survey.shared.models.Reactions
 import com.example.babajidemustapha.survey.shared.room.entities.Question
 import kotlinx.android.synthetic.main.view_question.view.*
 
-class QuestionView : ConstraintLayout, RadioGroup.OnCheckedChangeListener, CompoundButton.OnCheckedChangeListener, TextWatcher {
+class QuestionView : ConstraintLayout, RadioGroup.OnCheckedChangeListener, CompoundButton.OnCheckedChangeListener, TextWatcher, ReactionsViewGroup.OnCheckedChangeListener {
+    override fun onCheckedChanged(group: ReactionsViewGroup, selectedReaction: Reactions?) {
+        listener?.onReactionSelectResponse(selectedReaction!!)
+    }
+
     override fun afterTextChanged(s: Editable?) {
         listener?.onTextResponse(s?.toString() ?: "")
     }
@@ -82,6 +87,8 @@ class QuestionView : ConstraintLayout, RadioGroup.OnCheckedChangeListener, Compo
             else throw RuntimeException("Can't fetch text result for non-text question type")
         }
     var selectedRadioButtonIndex: Int = -1
+    var selectedReaction: Reactions? = null
+        get() = reactionsLayout.selectedReaction
 
 //    constructor(context: Context) : this(context, 0,false,) {
 //
@@ -113,6 +120,7 @@ class QuestionView : ConstraintLayout, RadioGroup.OnCheckedChangeListener, Compo
         layoutParams = LayoutParams(ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT))
         question_answer_short_text.addTextChangedListener(this)
         question_answer_long_text.addTextChangedListener(this)
+        reactionsLayout.setOnCheckedChangeListener(this)
     }
 
 //    override fun onFinishInflate() {
@@ -148,14 +156,23 @@ class QuestionView : ConstraintLayout, RadioGroup.OnCheckedChangeListener, Compo
                 toggleViewVisibility(question_answer_short_text, View.VISIBLE)
                 toggleViewVisibility(question_answer_long_text, View.GONE)
                 toggleViewVisibility(question_options_container, View.GONE)
+                toggleViewVisibility(reactionsLayout, View.GONE)
             }
             LONG_TEXT -> {
                 toggleViewVisibility(question_answer_long_text, View.VISIBLE)
                 toggleViewVisibility(question_options_container, View.GONE)
                 toggleViewVisibility(question_answer_short_text, View.GONE)
+                toggleViewVisibility(reactionsLayout, View.GONE)
             }
             SINGLE_OPTION, MULTIPLE_OPTION -> {
                 toggleViewVisibility(question_options_container, View.VISIBLE)
+                toggleViewVisibility(question_answer_short_text, View.GONE)
+                toggleViewVisibility(question_answer_long_text, View.GONE)
+                toggleViewVisibility(reactionsLayout, View.GONE)
+            }
+            REACTIONS -> {
+                toggleViewVisibility(reactionsLayout, View.VISIBLE)
+                toggleViewVisibility(question_options_container, View.GONE)
                 toggleViewVisibility(question_answer_short_text, View.GONE)
                 toggleViewVisibility(question_answer_long_text, View.GONE)
             }
@@ -172,6 +189,7 @@ class QuestionView : ConstraintLayout, RadioGroup.OnCheckedChangeListener, Compo
         fun onTextResponse(response: String)
         fun onSingleOptionsResponse(response: Int)
         fun onMultiSelectResponse(response: List<Int>)
+        fun onReactionSelectResponse(reaction: Reactions)
     }
 
     companion object {

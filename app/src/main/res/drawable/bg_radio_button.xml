@@ -3,5 +3,17 @@
 
     <item android:drawable="@drawable/bg_radio_button_checked_enabled" android:state_checked="true" android:state_enabled="true" />
     <item android:drawable="@drawable/bg_radio_button_unchecked_enabled" android:state_checked="false" android:state_enabled="true" />
+    <item android:state_checked="false" android:state_enabled="false">
+        <shape android:shape="rectangle">
+            <stroke android:width="@dimen/radio_button_border_width" android:color="@color/edit_text_bg" />
+            <corners android:radius="4dp" />
+        </shape>
+    </item>
+    <item android:state_checked="true" android:state_enabled="false">
+        <shape android:shape="rectangle">
+            <stroke android:width="@dimen/radio_button_border_width" android:color="@color/colorAccentDisabled" />
+            <corners android:radius="4dp" />
+        </shape>
+    </item>
     <item android:drawable="@drawable/bg_radio_button_unchecked_enabled" />
 </selector>
