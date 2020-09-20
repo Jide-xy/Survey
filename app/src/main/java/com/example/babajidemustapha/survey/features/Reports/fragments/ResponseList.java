@@ -138,7 +138,7 @@ public class ResponseList extends Fragment implements ResponseAdapter.OnResponse
     public void onSelected(ResponseHeader responseHeader) {
         Intent intent = new Intent(getContext(), ResponseDetail.class);
         intent.putExtra("survey_id", survey_id);
-        intent.putExtra("ID", responseHeader.getResponse_id());
+        intent.putExtra("ID", responseHeader.getResponseId());
         startActivity(intent);
     }
 

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "c233244622c7f35a5410d1902e8e5291",
+    "identityHash": "83a5b90ba5b29140ec1b24cd47556c93",
     "entities": [
       {
         "tableName": "QUESTION",
@@ -15,7 +15,7 @@
             "notNull": true
           },
           {
-            "fieldPath": "online_id",
+            "fieldPath": "onlineId",
             "columnName": "ONLINE_ID",
             "affinity": "INTEGER",
             "notNull": true
@@ -51,7 +51,7 @@
             "notNull": false
           },
           {
-            "fieldPath": "mandatory",
+            "fieldPath": "isMandatory",
             "columnName": "MANDATORY",
             "affinity": "INTEGER",
             "notNull": true
@@ -63,7 +63,7 @@
             "notNull": false
           },
           {
-            "fieldPath": "synced",
+            "fieldPath": "isSynced",
             "columnName": "SYNCED",
             "affinity": "INTEGER",
             "notNull": true
@@ -110,31 +110,31 @@
             "notNull": true
           },
           {
-            "fieldPath": "online_id",
+            "fieldPath": "onlineId",
             "columnName": "ONLINE_RES_DETAIL_ID",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "response_id",
+            "fieldPath": "responseId",
             "columnName": "OFFLINE_RESPONSE_ID",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "online_response_id",
+            "fieldPath": "onlineResponseId",
             "columnName": "ONLINE_RESPONSE_ID",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "question_id",
+            "fieldPath": "questionId",
             "columnName": "OFFLINE_QUESTION_ID",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "online_question_id",
+            "fieldPath": "onlineQuestionId",
             "columnName": "ONLINE_QUESTION_ID",
             "affinity": "INTEGER",
             "notNull": true
@@ -146,7 +146,7 @@
             "notNull": false
           },
           {
-            "fieldPath": "synced",
+            "fieldPath": "isSynced",
             "columnName": "SYNCED",
             "affinity": "INTEGER",
             "notNull": true
@@ -203,16 +203,16 @@
       },
       {
         "tableName": "RESPONSE",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`OFFLINE_ID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `ONLINE_ID` INTEGER NOT NULL, `RESPONDENT_NAME` TEXT, `RESPONSE_DATE` INTEGER NOT NULL, `SYNCED` INTEGER NOT NULL, `OFFLINE_SURVEY_ID` INTEGER NOT NULL, `ONLINE_SURVEY_ID` INTEGER NOT NULL, FOREIGN KEY(`OFFLINE_SURVEY_ID`) REFERENCES `SURVEY`(`OFFLINE_ID`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`OFFLINE_ID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `ONLINE_ID` INTEGER NOT NULL, `RESPONDENT_NAME` TEXT, `RESPONSE_DATE` INTEGER NOT NULL, `SYNCED` INTEGER NOT NULL, `OFFLINE_SURVEY_ID` INTEGER NOT NULL, `ONLINE_SURVEY_ID` INTEGER, FOREIGN KEY(`OFFLINE_SURVEY_ID`) REFERENCES `SURVEY`(`OFFLINE_ID`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
-            "fieldPath": "response_id",
+            "fieldPath": "responseId",
             "columnName": "OFFLINE_ID",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "online_response_id",
+            "fieldPath": "onlineResponseId",
             "columnName": "ONLINE_ID",
             "affinity": "INTEGER",
             "notNull": true
@@ -230,22 +230,22 @@
             "notNull": true
           },
           {
-            "fieldPath": "synced",
+            "fieldPath": "isSynced",
             "columnName": "SYNCED",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "survey_id",
+            "fieldPath": "surveyId",
             "columnName": "OFFLINE_SURVEY_ID",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "online_survey_id",
+            "fieldPath": "onlineSurveyId",
             "columnName": "ONLINE_SURVEY_ID",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -301,13 +301,13 @@
             "notNull": false
           },
           {
-            "fieldPath": "privacy",
+            "fieldPath": "isPrivacy",
             "columnName": "PRIVACY",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "synced",
+            "fieldPath": "isSynced",
             "columnName": "SYNCED",
             "affinity": "INTEGER",
             "notNull": true
@@ -344,7 +344,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c233244622c7f35a5410d1902e8e5291')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '83a5b90ba5b29140ec1b24cd47556c93')"
     ]
   }
 }

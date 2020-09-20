@@ -39,7 +39,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,7 +118,7 @@ public class SearchSurvey extends Fragment {
                     JSONObject object2 = object.getJSONArray("QUESTIONS").getJSONObject(j);
                     Question question = new Question(object2.getInt("QUESTION_ID"), object2.getInt("QUESTION_NO"), QuestionType.valueOf(object2.getString("QUESTION_TYPE")), object2.getInt("SURVEY_ID"),
                             new JSONArray(object2.getString("QUESTION_OPTIONS")), object2.getBoolean("MANDATORY"),object2.getString("QUESTION_TEXT"));
-                    survey.addQuestion(question);
+                    //survey.addQuestion(question);
                 }
             }
             survey.setNoOFQues(ques_no);
@@ -230,13 +229,13 @@ public class SearchSurvey extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), SurveyAction.class);
                 intent.putExtra("online", true);
-                intent.putExtra("questions", (Serializable) source.get(getAdapterPosition()).getQuestions());
-                intent.putExtra("name",source.get(getAdapterPosition()).getName());
-                intent.putExtra("ID",source.get(getAdapterPosition()).getId());
-                intent.putExtra("Description",source.get(getAdapterPosition()).getDesc());
-                intent.putExtra("Username",source.get(getAdapterPosition()).getUsername());
-                intent.putExtra("device_token",source.get(getAdapterPosition()).getDevice_token());
-                intent.putExtra("quesNo",source.get(getAdapterPosition()).getNoOfQues());
+                //intent.putExtra("questions", (Serializable) source.get(getAdapterPosition()).getQuestions());
+                intent.putExtra("name", source.get(getAdapterPosition()).getName());
+                intent.putExtra("ID", source.get(getAdapterPosition()).getId());
+                intent.putExtra("Description", source.get(getAdapterPosition()).getDesc());
+                intent.putExtra("Username", source.get(getAdapterPosition()).getUsername());
+                intent.putExtra("device_token", source.get(getAdapterPosition()).getDeviceToken());
+                intent.putExtra("quesNo", source.get(getAdapterPosition()).getNoOfQues());
                 startActivity(intent);
             }
         }

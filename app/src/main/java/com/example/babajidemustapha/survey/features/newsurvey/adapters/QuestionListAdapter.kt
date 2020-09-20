@@ -59,11 +59,11 @@ class QuestionListAdapter(private val listener: QuestionsSetupInteractionListene
                 listener.onSubmit(false, questions, index, "Question cannot be blank")
                 return
             }
-            if (question.questionType.hasOptions() && question.options.isNullOrEmpty()) {
-                listener.onSubmit(false, questions, index, "Question type of ${question.questionType.getDisplayName()} must have at least one option")
+            if (question.questionType!!.hasOptions() && question.options.isNullOrEmpty()) {
+                listener.onSubmit(false, questions, index, "Question type of ${question.questionType!!.getDisplayName()} must have at least one option")
                 return
             }
-            if (question.questionType.hasOptions() && !validateQuestionOptions(question)) {
+            if (question.questionType!!.hasOptions() && !validateQuestionOptions(question)) {
                 listener.onSubmit(false, questions, index, "Question options cannot be blank")
                 return
             }
@@ -79,8 +79,8 @@ class QuestionListAdapter(private val listener: QuestionsSetupInteractionListene
     }
 
     private fun validateQuestionOptions(question: Question): Boolean {
-        for (option in question.options) {
-            if (option.isNullOrBlank()) {
+        for (option in question.options.orEmpty()) {
+            if (option.isBlank()) {
                 return false
             }
         }
@@ -111,7 +111,7 @@ class QuestionListAdapter(private val listener: QuestionsSetupInteractionListene
 
         inner class OptionsTextWatcher(private val index: Int) : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                questions[adapterPosition].options[index] = s.toString()
+                questions[adapterPosition].options!![index] = s.toString()
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -136,7 +136,7 @@ class QuestionListAdapter(private val listener: QuestionsSetupInteractionListene
                 questions[adapterPosition].isMandatory = isChecked
             }
             addOptionsButton.setOnClickListener {
-                questions[adapterPosition].options.add("")
+                questions[adapterPosition].options!!.add("")
                 notifyItemChanged(adapterPosition)
             }
         }
@@ -156,14 +156,14 @@ class QuestionListAdapter(private val listener: QuestionsSetupInteractionListene
                     addOptionsButton.visibility = View.VISIBLE
                     questionOptionsContainer.removeAllViews()
                     val layoutInflater = LayoutInflater.from(itemView.context)
-                    for ((index, option) in question.options.withIndex()) {
+                    for ((index, option) in question.options!!.withIndex()) {
                         val editText: EditText = layoutInflater.inflate(R.layout.view_option_edittext, questionOptionsContainer, false) as EditText
                         questionOptionsContainer.addView(editText)
                         val textWatcher = OptionsTextWatcher(index)
                         textWatchers.add(index, textWatcher)
                         editText.addTextChangedListener(textWatcher)
                         editText.setText(option)
-                        if (index == question.options.size - 1) editText.requestFocus()
+                        if (index == question.options!!.size - 1) editText.requestFocus()
                     }
                 }
                 else -> {

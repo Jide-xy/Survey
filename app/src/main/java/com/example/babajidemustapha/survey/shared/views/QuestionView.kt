@@ -99,7 +99,7 @@ class QuestionView : ConstraintLayout, RadioGroup.OnCheckedChangeListener, Compo
         this.viewMode = viewMode
         this.compulsory = question.isMandatory
         this.questionText = question.questionText
-        this.questionType = question.questionType
+        this.questionType = question.questionType!!
         this.options = question.options
         this.total = total
         this.questionNo = question.questionNo

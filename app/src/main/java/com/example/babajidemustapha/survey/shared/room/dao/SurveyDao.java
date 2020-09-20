@@ -11,7 +11,7 @@ import com.example.babajidemustapha.survey.shared.room.entities.Question;
 import com.example.babajidemustapha.survey.shared.room.entities.ResponseDetail;
 import com.example.babajidemustapha.survey.shared.room.entities.ResponseHeader;
 import com.example.babajidemustapha.survey.shared.room.entities.Survey;
-import com.example.babajidemustapha.survey.shared.room.entities.Survey.SurveyQueryResult;
+import com.example.babajidemustapha.survey.shared.room.entities.SurveyWithResponseHeader;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -61,7 +61,7 @@ public abstract class SurveyDao {
                         new ResponseHeaderWithEmbeddedResponseDetails();
                 responseHeaderWithEmbeddedResponseDetails.setResponseHeader(responseHeader);
                 responseHeaderWithEmbeddedResponseDetails.setResponseDetails(getResponseDetailsForResponseHeaderWithOfflineId(
-                        responseHeader.getResponse_id()
+                        responseHeader.getResponseId()
                 ));
                 responseHeaderWithEmbeddedResponseDetailsInnerList.add(responseHeaderWithEmbeddedResponseDetails);
             }
@@ -79,7 +79,7 @@ public abstract class SurveyDao {
                     new ResponseHeaderWithEmbeddedResponseDetails();
             responseHeaderWithEmbeddedResponseDetails.setResponseHeader(responseHeader);
             responseHeaderWithEmbeddedResponseDetails.setResponseDetails(getResponseDetailsForResponseHeaderWithOfflineId(
-                    responseHeader.getResponse_id()
+                    responseHeader.getResponseId()
             ));
             responseHeaderWithEmbeddedResponseDetailsInnerList.add(responseHeaderWithEmbeddedResponseDetails);
         }
@@ -102,11 +102,11 @@ public abstract class SurveyDao {
                     : survey.getResponses()) {
                 ResponseHeader responseHeader = responseHeaderWithEmbeddedResponseDetails.getResponseHeader();
                 responseHeader.setSynced(true);
-                responseHeader.setOnline_survey_id(mSurvey.getOnlineId());
+                responseHeader.setOnlineSurveyId(mSurvey.getOnlineId());
 
                 for (ResponseDetail responseDetail : responseHeaderWithEmbeddedResponseDetails.getResponseDetails()) {
                     responseDetail.setSynced(true);
-                    responseDetail.setOnline_response_id(responseHeader.getOnline_response_id());
+                    responseDetail.setOnlineResponseId(responseHeader.getOnlineResponseId());
                 }
                 saveResponse(responseHeader, responseHeaderWithEmbeddedResponseDetails.getResponseDetails());
             }
@@ -128,8 +128,8 @@ public abstract class SurveyDao {
     public long[] saveOnlineResponseHeaders(List<ResponseHeader> responseHeaders) {
         for (ResponseHeader responseHeader :
                 responseHeaders) {
-            long offlineSurveyId = getSurveyWithOnlineId(responseHeader.getOnline_survey_id()).getId();
-            responseHeader.setSurvey_id((int) offlineSurveyId);
+            long offlineSurveyId = getSurveyWithOnlineId(responseHeader.getOnlineSurveyId()).getId();
+            responseHeader.setSurveyId((int) offlineSurveyId);
             responseHeader.setSynced(true);
         }
         return insertResponseHeaders(responseHeaders);
@@ -139,10 +139,10 @@ public abstract class SurveyDao {
     public void saveOnlineResponseDetails(List<ResponseDetail> responseDetails) {
         for (ResponseDetail responseDetail :
                 responseDetails) {
-            long offlineQuestionId = getQuestionWithOnlineId(responseDetail.getOnline_question_id()).getId();
-            long offlineResponseHeaderId = getResponseHeaderWithOnlineId(responseDetail.getOnline_response_id()).getResponse_id();
-            responseDetail.setQuestion_id((int) offlineQuestionId);
-            responseDetail.setResponse_id((int) offlineResponseHeaderId);
+            long offlineQuestionId = getQuestionWithOnlineId(responseDetail.getOnlineQuestionId()).getId();
+            long offlineResponseHeaderId = getResponseHeaderWithOnlineId(responseDetail.getOnlineResponseId()).getResponseId();
+            responseDetail.setQuestionId((int) offlineQuestionId);
+            responseDetail.setResponseId((int) offlineResponseHeaderId);
             responseDetail.setSynced(true);
         }
         insertResponseDetails(responseDetails);
@@ -153,11 +153,11 @@ public abstract class SurveyDao {
         long responseHeaderId = saveResponseHeader(responseHeader);
         for (ResponseDetail responseDetail :
                 responseDetails) {
-            responseDetail.setResponse_id((int) responseHeaderId);
-            responseDetail.setOnline_question_id(
-                    getQuestionFromOfflineId(responseDetail.getQuestion_id()).getOnline_id());
-            responseDetail.setOnline_response_id(
-                    getResponseHeaderFromOfflineId(responseHeaderId).getOnline_response_id()
+            responseDetail.setResponseId((int) responseHeaderId);
+            responseDetail.setOnlineQuestionId(
+                    getQuestionFromOfflineId(responseDetail.getQuestionId()).getOnlineId());
+            responseDetail.setOnlineResponseId(
+                    getResponseHeaderFromOfflineId(responseHeaderId).getOnlineResponseId()
             );
         }
         insertResponseDetails(responseDetails);
@@ -185,9 +185,9 @@ public abstract class SurveyDao {
     @Query("SELECT * FROM SURVEY")
     public abstract List<Survey> getAllSurveys();
 
-    @Query("SELECT SURVEY.* , COUNT(RESPONSE.OFFLINE_SURVEY_ID) AS responseCount FROM SURVEY LEFT JOIN RESPONSE ON SURVEY.OFFLINE_ID = RESPONSE.OFFLINE_SURVEY_ID " +
-            "GROUP BY SURVEY.OFFLINE_ID")
-    public abstract List<SurveyQueryResult> getAllSurveysWithResponseCount();
+    @Transaction
+    @Query("SELECT * FROM SURVEY")
+    public abstract List<SurveyWithResponseHeader> getAllSurveysWithResponse();
 
     @Query("SELECT * FROM SURVEY WHERE ONLINE_ID = :online_id")
     public abstract Survey getSurveyWithOnlineId(int online_id);
@@ -245,5 +245,5 @@ public abstract class SurveyDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract long[] saveResponseDetail(List<ResponseDetail> responseDetails);
-    //REGION END
+    //ENDREGION
 }

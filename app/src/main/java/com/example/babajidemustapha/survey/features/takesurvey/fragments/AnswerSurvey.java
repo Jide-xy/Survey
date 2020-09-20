@@ -279,8 +279,8 @@ public class AnswerSurvey extends Fragment {
     }
     public JSONObject buildResponseHeaderJSON(ResponseHeader responseHeader) throws JSONException{
         JSONObject object = new JSONObject();
-        object.put("RESPONSE_ID", responseHeader.getResponse_id());
-        object.put("SURVEY_ID", responseHeader.getSurvey_id());
+        object.put("RESPONSE_ID", responseHeader.getResponseId());
+        object.put("SURVEY_ID", responseHeader.getSurveyId());
         object.put("RESPONDENT_NAME", responseHeader.getRespondentName());
         object.put("RESPONSE_DATE", responseHeader.getDate());
         return object;
@@ -291,7 +291,7 @@ public class AnswerSurvey extends Fragment {
         for (int i = 0; i < responseDetails.size(); i++) {
             ResponseDetail responseDetail = responseDetails.get(i);
             JSONObject object = new JSONObject();
-            object.put("QUESTION_ID", responseDetail.getQuestion_id());
+            object.put("QUESTION_ID", responseDetail.getQuestionId());
             object.put("RESPONSE", responseDetail.getResponse());
             jsonArray.put(object);
         }

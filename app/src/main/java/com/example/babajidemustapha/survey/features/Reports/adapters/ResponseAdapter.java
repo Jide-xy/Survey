@@ -36,7 +36,7 @@ public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ResponseAdapter.ViewHolder holder, int position) {
-        Log.e("id", source.get(position).getResponse_id() + "");
+        Log.e("id", source.get(position).getResponseId() + "");
         holder.name.setText("Response by: " + (source.get(position).getRespondentName() != null && !source.get(position).getRespondentName().isEmpty() ? source.get(position).getRespondentName() : "Anonymous"));
         holder.date.setText(DateFormat.format("dd/MM/yy", source.get(position).getDate()));
         holder.time.setText(DateFormat.format("HH:mm", source.get(position).getDate()));

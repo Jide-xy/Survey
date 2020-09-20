@@ -14,14 +14,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.babajidemustapha.survey.R;
 import com.example.babajidemustapha.survey.shared.room.entities.Survey;
+import com.example.babajidemustapha.survey.shared.room.entities.SurveyWithResponseHeader;
 
 import java.util.List;
 
 public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.ViewHolder> {
-    private List<? extends Survey> source;
+    private List<SurveyWithResponseHeader> source;
     private SurveyActionListener surveyActionListener;
 
-    public SurveyAdapter(List<? extends Survey> source, SurveyActionListener surveyActionListener) {
+    public SurveyAdapter(List<SurveyWithResponseHeader> source, SurveyActionListener surveyActionListener) {
         this.source = source;
         this.surveyActionListener = surveyActionListener;
     }
@@ -30,7 +31,7 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.ViewHolder
 //        source.add(survey);
 //    }
 
-    public void changeSource(List<Survey> source) {
+    public void changeSource(List<SurveyWithResponseHeader> source) {
         this.source = source;
         notifyDataSetChanged();
     }
@@ -43,15 +44,13 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(SurveyAdapter.ViewHolder holder, int position) {
-        holder.name.setText(source.get(position).getName());
-        holder.desc.setText(source.get(position).getDesc());
-        holder.date.setText(DateFormat.format("dd/MM/yy", source.get(position).getDate()));
+        holder.name.setText(source.get(position).getSurvey().getName());
+        holder.desc.setText(source.get(position).getSurvey().getDesc());
+        holder.date.setText(DateFormat.format("dd/MM/yy", source.get(position).getSurvey().getDate()));
 
 //            holder.no_of_ques.setText(source.get(position).getNoOfQues()+" question(s)");
-        holder.privacy.setText(source.get(position).isPrivacy() ? "(Public)" : "(Private)");
-        if (source.get(position) instanceof Survey.SurveyQueryResult) {
-            holder.no_of_responses.setText(String.valueOf(((Survey.SurveyQueryResult) source.get(position)).getResponseCount()));
-        }
+        holder.privacy.setText(source.get(position).getSurvey().isPrivacy() ? "(Public)" : "(Private)");
+        holder.no_of_responses.setText(String.valueOf((source.get(position)).getResponseCount()));
     }
 
     @Override
@@ -93,10 +92,10 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.ViewHolder
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.action_take_survey:
-                            surveyActionListener.takeSurvey(source.get(getAdapterPosition()), false);
+                            surveyActionListener.takeSurvey(source.get(getAdapterPosition()).getSurvey(), false);
                             return true;
                         case R.id.action_view_report:
-                            surveyActionListener.viewReport(source.get(getAdapterPosition()));
+                            surveyActionListener.viewReport(source.get(getAdapterPosition()).getSurvey());
                             return true;
                     }
                     return false;

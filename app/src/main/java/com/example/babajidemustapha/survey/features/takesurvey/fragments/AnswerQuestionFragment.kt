@@ -43,7 +43,7 @@ class AnswerQuestionFragment : Fragment(), QuestionView.OnResponseProvidedListen
 
     override fun onSingleOptionsResponse(response: Int) {
         val question = listener?.onQuestionSelected(questionIndex)
-        question?.questionResponse = ResponseDetail(question!!.id, question.options[response])
+        question?.questionResponse = ResponseDetail(question!!.id, question.options!![response])
         listener?.updateProgress()
     }
 
@@ -51,7 +51,7 @@ class AnswerQuestionFragment : Fragment(), QuestionView.OnResponseProvidedListen
         val question = listener?.onQuestionSelected(questionIndex)
         val responseTextList = mutableListOf<String>()
         for (res in response) {
-            responseTextList.add(question!!.options[res])
+            responseTextList.add(question!!.options!![res])
         }
         question?.questionResponse = ResponseDetail(question!!.id, if (responseTextList.isNullOrEmpty()) null else Gson().toJson(responseTextList))
         listener?.updateProgress()
