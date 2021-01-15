@@ -15,18 +15,9 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.babajidemustapha.survey.R
-import com.example.babajidemustapha.survey.features.LoginActivity
 import com.example.babajidemustapha.survey.features.dashboard.activities.DashboardActivity
-import com.example.babajidemustapha.survey.shared.room.db.SurveyDatabase
-import com.example.babajidemustapha.survey.shared.room.entities.Question
-import com.example.babajidemustapha.survey.shared.room.entities.ResponseDetail
-import com.example.babajidemustapha.survey.shared.room.entities.ResponseHeader
-import com.example.babajidemustapha.survey.shared.room.entities.Survey
 import com.example.babajidemustapha.survey.shared.utils.Constants
-import com.example.babajidemustapha.survey.shared.utils.DbOperationHelper
-import com.example.babajidemustapha.survey.shared.utils.DbOperationHelper.IDbOperationHelper
 import com.example.babajidemustapha.survey.shared.utils.Sha1
-import com.google.gson.Gson
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
@@ -49,7 +40,6 @@ class LoginActivity : AppCompatActivity() {
     var mSignInButton: Button? = null
     var loginData: SharedPreferences? = null
     var request: JsonObjectRequest? = null
-    var db: SurveyDatabase? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loginData = getSharedPreferences("user_data", MODE_PRIVATE)
@@ -57,7 +47,6 @@ class LoginActivity : AppCompatActivity() {
             goToDashboard()
         }
         setContentView(R.layout.activity_login)
-        db = SurveyDatabase.Companion.getInstance(this)
         // Set up the login form.
         mUsernameView = findViewById(R.id.username)
         mPasswordView = findViewById(R.id.password)
@@ -134,34 +123,34 @@ class LoginActivity : AppCompatActivity() {
                 try {
                     response = response_.getJSONArray("RESPONSE").getJSONObject(0)
                     if (response.getString("STATUS").equals("success", ignoreCase = true)) {
-                        DbOperationHelper.Companion.execute(object : IDbOperationHelper<Void?> {
-                            override fun run(): Void? {
-                                db!!.clearAllTables()
-                                try {
-                                    db!!.surveyDao().saveOnlineSurvey(
-                                            Arrays.asList(*Gson().fromJson(response_.getJSONArray("SURVEYS").toString(), Array<Survey>::class.java)))
-                                    db!!.questionDao().saveOnlineQuestions(
-                                            Arrays.asList(*Gson().fromJson(response_.getJSONArray("QUESTIONS").toString(), Array<Question>::class.java)))
-                                    db!!.responseHeaderDao().saveOnlineResponseHeaders(
-                                            Arrays.asList(*Gson().fromJson(response_.getJSONArray("RESPONSES").toString(), Array<ResponseHeader>::class.java)))
-                                    db!!.responseDetailDao().saveOnlineResponseDetails(
-                                            Arrays.asList(*Gson().fromJson(response_.getJSONArray("RESPONSE_DETAILS").toString(), Array<ResponseDetail>::class.java)))
-                                } catch (e: JSONException) {
-                                    throw RuntimeException(e)
-                                }
-                                return null
-                            }
-
-                            override fun onCompleted(aVoid: Void?) {
-                                try {
-                                    val user_dt = response_.getJSONArray("USER_DETAILS").getJSONObject(0)
-                                    saveUserData(user_dt)
-                                    goToDashboard()
-                                } catch (e: JSONException) {
-                                    throw RuntimeException(e)
-                                }
-                            }
-                        })
+//                        DbOperationHelper.Companion.execute(object : IDbOperationHelper<Void?> {
+//                            override fun run(): Void? {
+//                                db!!.clearAllTables()
+////                                try {
+////                                    db!!.surveyDao().saveOnlineSurvey(
+////                                            Arrays.asList(*Gson().fromJson(response_.getJSONArray("SURVEYS").toString(), Array<Survey>::class.java)))
+////                                    db!!.questionDao().saveOnlineQuestions(
+////                                            Arrays.asList(*Gson().fromJson(response_.getJSONArray("QUESTIONS").toString(), Array<Question>::class.java)))
+////                                    db!!.responseHeaderDao().saveOnlineResponseHeaders(
+////                                            Arrays.asList(*Gson().fromJson(response_.getJSONArray("RESPONSES").toString(), Array<ResponseHeader>::class.java)))
+////                                    db!!.responseDetailDao().saveOnlineResponseDetails(
+////                                            Arrays.asList(*Gson().fromJson(response_.getJSONArray("RESPONSE_DETAILS").toString(), Array<ResponseDetail>::class.java)))
+////                                } catch (e: JSONException) {
+////                                    throw RuntimeException(e)
+////                                }
+//                                return null
+//                            }
+//
+//                            override fun onCompleted(aVoid: Void?) {
+//                                try {
+//                                    val user_dt = response_.getJSONArray("USER_DETAILS").getJSONObject(0)
+//                                    saveUserData(user_dt)
+//                                    goToDashboard()
+//                                } catch (e: JSONException) {
+//                                    throw RuntimeException(e)
+//                                }
+//                            }
+//                        })
                         //                            download();
                     } else if (response.getString("STATUS").equals("fail", ignoreCase = true)) {
                         Toast.makeText(this@LoginActivity, "Incorrect username or password", Toast.LENGTH_SHORT).show()

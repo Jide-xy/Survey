@@ -10,10 +10,11 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.babajidemustapha.survey.R
-import com.example.babajidemustapha.survey.shared.models.QuestionType
-import com.example.babajidemustapha.survey.shared.models.QuestionType.*
 import com.example.babajidemustapha.survey.shared.models.Reactions
-import com.example.babajidemustapha.survey.shared.room.entities.Question
+import com.jide.surveyapp.model.Option
+import com.jide.surveyapp.model.QuestionType
+import com.jide.surveyapp.model.QuestionType.*
+import com.jide.surveyapp.model.relations.QuestionWithOptionsAndResponse
 import kotlinx.android.synthetic.main.view_question.view.*
 
 class QuestionView : ConstraintLayout, RadioGroup.OnCheckedChangeListener, CompoundButton.OnCheckedChangeListener, TextWatcher, ReactionsViewGroup.OnCheckedChangeListener {
@@ -66,7 +67,7 @@ class QuestionView : ConstraintLayout, RadioGroup.OnCheckedChangeListener, Compo
             field = value
             question_text.text = field
         }
-    var options: List<String>?
+    var options: List<Option>?
         set(value) {
             field = value
             buildOptionsView(field)
@@ -82,9 +83,11 @@ class QuestionView : ConstraintLayout, RadioGroup.OnCheckedChangeListener, Compo
     val selectedCheckBoxIndexes: MutableList<Int> = mutableListOf()
     var textAnswer: String? = null
         get() {
-            return if (questionType == SHORT_TEXT) question_answer_short_text.text.toString()
-            else if (questionType == LONG_TEXT) question_answer_long_text.text.toString()
-            else throw RuntimeException("Can't fetch text result for non-text question type")
+            return when (questionType) {
+                SHORT_TEXT -> question_answer_short_text.text.toString()
+                LONG_TEXT -> question_answer_long_text.text.toString()
+                else -> throw RuntimeException("Can't fetch text result for non-text question type")
+            }
         }
     var selectedRadioButtonIndex: Int = -1
     var selectedReaction: Reactions? = null
@@ -94,15 +97,15 @@ class QuestionView : ConstraintLayout, RadioGroup.OnCheckedChangeListener, Compo
 //
 //    }
 
-    constructor(context: Context, viewMode: Int, question: Question, total: Int, listener: OnResponseProvidedListener? = null) : super(context) {
+    constructor(context: Context, viewMode: Int, question: QuestionWithOptionsAndResponse, total: Int, listener: OnResponseProvidedListener? = null) : super(context) {
         initializeView(context)
         this.viewMode = viewMode
-        this.compulsory = question.isMandatory
-        this.questionText = question.questionText
-        this.questionType = question.questionType!!
+        this.compulsory = question.question.mandatory
+        this.questionText = question.question.questionText
+        this.questionType = question.question.questionType!!
         this.options = question.options
         this.total = total
-        this.questionNo = question.questionNo
+        this.questionNo = question.question.questionNo
         this.listener = listener
     }
 
@@ -132,7 +135,7 @@ class QuestionView : ConstraintLayout, RadioGroup.OnCheckedChangeListener, Compo
 //        this.options = options
 //    }
 
-    private fun buildOptionsView(options: List<String>?) {
+    private fun buildOptionsView(options: List<Option>?) {
         if (options != null) {
             selectedRadioButtonIndex = -1
             selectedCheckBoxIndexes.clear()
@@ -140,7 +143,7 @@ class QuestionView : ConstraintLayout, RadioGroup.OnCheckedChangeListener, Compo
             val layoutInflater = LayoutInflater.from(this.context)
             for (option in options) {
                 val view = layoutInflater.inflate(if (questionType == SINGLE_OPTION) R.layout.view_radio_button else R.layout.view_checkbox, question_options_container, false)
-                (view as TextView).text = option
+                (view as TextView).text = option.optionText
                 when (view) {
                     is CheckBox -> view.setOnCheckedChangeListener(this)
                     is RadioButton -> question_options_container.setOnCheckedChangeListener(this)

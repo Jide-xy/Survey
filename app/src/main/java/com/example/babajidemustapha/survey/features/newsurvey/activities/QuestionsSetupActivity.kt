@@ -5,9 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.babajidemustapha.survey.R
 import com.example.babajidemustapha.survey.features.newsurvey.fragments.CreateSurveyFragment
 import com.example.babajidemustapha.survey.features.newsurvey.fragments.QuestionsSetupFragment
-import com.example.babajidemustapha.survey.shared.room.entities.Survey
+import com.jide.surveyapp.model.Survey
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_questions_setup.*
 
+@AndroidEntryPoint
 class QuestionsSetupActivity : AppCompatActivity(), QuestionsSetupFragment.OnSurveySetupInteractionListener {
 
     lateinit var mSurvey: Survey

@@ -4,6 +4,12 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Survey.iml" filepath="$PROJECT_DIR$/.idea/modules/Survey.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Survey.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Survey.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sharedcore/Survey.sharedcore.iml" filepath="$PROJECT_DIR$/.idea/modules/sharedcore/Survey.sharedcore.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sharedcore/Survey.sharedcore.androidAndroidTestRelease.iml" filepath="$PROJECT_DIR$/.idea/modules/sharedcore/Survey.sharedcore.androidAndroidTestRelease.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sharedcore/Survey.sharedcore.commonMain.iml" filepath="$PROJECT_DIR$/.idea/modules/sharedcore/Survey.sharedcore.commonMain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sharedcore/Survey.sharedcore.commonTest.iml" filepath="$PROJECT_DIR$/.idea/modules/sharedcore/Survey.sharedcore.commonTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sharedcore/Survey.sharedcore.iosMain.iml" filepath="$PROJECT_DIR$/.idea/modules/sharedcore/Survey.sharedcore.iosMain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sharedcore/Survey.sharedcore.iosTest.iml" filepath="$PROJECT_DIR$/.idea/modules/sharedcore/Survey.sharedcore.iosTest.iml" />
     </modules>
   </component>
 </project>

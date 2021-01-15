@@ -10,7 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.babajidemustapha.survey.R
 import com.example.babajidemustapha.survey.features.newsurvey.fragments.QuestionsSetupFragment.OnSurveySetupInteractionListener
-import com.example.babajidemustapha.survey.shared.room.entities.Survey
+import com.jide.surveyapp.model.Survey
 import kotlinx.android.synthetic.main.fragment_create_survey.*
 
 
@@ -35,10 +35,7 @@ class CreateSurveyFragment : Fragment() {
         go.setOnClickListener { v ->
 
             if (!name.text.toString().isEmpty() && !desc.text.toString().isEmpty()) {
-                val survey = Survey()
-                survey.name = name.text.toString()
-                survey.desc = desc.text.toString()
-                survey.isPrivacy = privacy.isChecked
+                val survey = Survey(name.text.toString(), desc.text.toString(), privacy.isChecked.not())
                 listener?.createSurvey(survey)
             } else {
                 Toast.makeText(context, "1 or more fields empty", Toast.LENGTH_SHORT).show()

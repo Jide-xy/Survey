@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.babajidemustapha.survey.features.Reports.activities.ResponseDetail"
+    tools:context="com.example.babajidemustapha.survey.features.reports.activities.ResponseDetail"
     tools:showIn="@layout/activity_response_detail">
 
     <LinearLayout

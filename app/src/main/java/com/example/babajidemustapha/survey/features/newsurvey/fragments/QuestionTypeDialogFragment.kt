@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment
 import com.example.babajidemustapha.survey.R
 import com.example.babajidemustapha.survey.features.newsurvey.adapters.QuestionTypeAdapter
 import com.example.babajidemustapha.survey.features.newsurvey.adapters.QuestionTypeAdapter.QuestionTypeInteractionListener
-import com.example.babajidemustapha.survey.shared.models.QuestionType
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.jide.surveyapp.model.QuestionType
 import kotlinx.android.synthetic.main.dialog_question_type.*
 
 // TODO: Rename parameter arguments, choose names that match

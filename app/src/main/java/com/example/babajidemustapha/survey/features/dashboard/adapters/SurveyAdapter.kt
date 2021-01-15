@@ -8,14 +8,11 @@ import android.widget.TextView
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.example.babajidemustapha.survey.R
-import com.example.babajidemustapha.survey.shared.room.entities.Survey
-import com.example.babajidemustapha.survey.shared.room.entities.SurveyWithResponseHeader
+import com.jide.surveyapp.model.Survey
 
-class SurveyAdapter(private var source: List<SurveyWithResponseHeader>, private val surveyActionListener: SurveyActionListener) : RecyclerView.Adapter<SurveyAdapter.ViewHolder>() {
-    //    public void add(Survey survey) {
-    //        source.add(survey);
-    //    }
-    fun changeSource(source: List<SurveyWithResponseHeader>) {
+class SurveyAdapter(private var source: List<Survey>, private val surveyActionListener: SurveyActionListener) : RecyclerView.Adapter<SurveyAdapter.ViewHolder>() {
+
+    fun changeSource(source: List<Survey>) {
         this.source = source
         notifyDataSetChanged()
     }
@@ -25,12 +22,12 @@ class SurveyAdapter(private var source: List<SurveyWithResponseHeader>, private 
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.name.text = source[position].survey.name
-        holder.desc.text = source[position].survey.desc
-        holder.date.text = DateFormat.format("dd/MM/yy", source[position].survey.date)
+        holder.name.text = source[position].name
+        holder.desc.text = source[position].description
+        holder.date.text = DateFormat.format("dd/MM/yy", source[position].dateCreated.toLong())
 
 //            holder.no_of_ques.setText(source.get(position).getNoOfQues()+" question(s)");
-        holder.privacy.text = if (source[position].survey.isPrivacy) "(Public)" else "(Private)"
+        holder.privacy.text = if (source[position].shared) "(Public)" else "(Private)"
         holder.no_of_responses.text = source[position].responseCount.toString()
     }
 
@@ -39,11 +36,11 @@ class SurveyAdapter(private var source: List<SurveyWithResponseHeader>, private 
     }
 
     interface SurveyActionListener {
-        fun takeSurvey(survey: Survey?, isOnline: Boolean)
-        fun viewReport(survey: Survey?)
+        fun takeSurvey(survey: Survey, isOnline: Boolean)
+        fun viewReport(survey: Survey)
     }
 
-    protected inner class ViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    inner class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         var name: TextView
         var desc: TextView
         var date: TextView
@@ -56,11 +53,11 @@ class SurveyAdapter(private var source: List<SurveyWithResponseHeader>, private 
             popup.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.action_take_survey -> {
-                        surveyActionListener.takeSurvey(source[adapterPosition].survey, false)
+                        surveyActionListener.takeSurvey(source[adapterPosition], false)
                         return@OnMenuItemClickListener true
                     }
                     R.id.action_view_report -> {
-                        surveyActionListener.viewReport(source[adapterPosition].survey)
+                        surveyActionListener.viewReport(source[adapterPosition])
                         return@OnMenuItemClickListener true
                     }
                 }

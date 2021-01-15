@@ -10,25 +10,19 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.babajidemustapha.survey.R
-import com.example.babajidemustapha.survey.shared.room.db.SurveyDatabase
+
 import com.example.babajidemustapha.survey.shared.room.entities.ResponseDetail
-import com.example.babajidemustapha.survey.shared.room.entities.ResponseHeader
-import com.example.babajidemustapha.survey.shared.utils.DbOperationHelper
-import com.example.babajidemustapha.survey.shared.utils.DbOperationHelper.IDbOperationHelper
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.google.gson.Gson
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
 
 class FirebaseMessageHandler : FirebaseMessagingService() {
     var requestQueue: RequestQueue? = null
-    var db: SurveyDatabase? = null
     var data: Map<String, String>? = null
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         requestQueue = Volley.newRequestQueue(this)
-        db = SurveyDatabase.Companion.getInstance(this)
         val TAG = "TAG"
         // ...
 
@@ -51,24 +45,24 @@ class FirebaseMessageHandler : FirebaseMessagingService() {
                 Log.e("ddd", response.toString())
                 try {
                     if (response.getString("STATUS").equals("success", ignoreCase = true)) {
-                        DbOperationHelper.execute(object : IDbOperationHelper<Long> {
-                            override fun run(): Long {
-                                return try {
-                                    val response_id = db!!.surveyDao().saveOnlineResponseHeaders(
-                                            Arrays.asList(*Gson().fromJson(response.getJSONArray("RESPONSES").toString(), Array<ResponseHeader>::class.java)))[0]
-                                    db!!.surveyDao().saveOnlineResponseDetails(
-                                            Arrays.asList(*Gson().fromJson(response.getJSONArray("RESPONSE_DETAILS").toString(), Array<ResponseDetail>::class.java)))
-                                    val survey = db!!.surveyDao().getSurveyWithOnlineId(response.getJSONArray("RESPONSES").getJSONObject(0).getInt("SURVEY_ID"))
-                                    response_id
-                                } catch (e: JSONException) {
-                                    throw RuntimeException(e)
-                                }
-                            }
-
-                            override fun onCompleted(response_id: Long) {
-                                buildAndShowNotification(response_id)
-                            }
-                        })
+//                        DbOperationHelper.execute(object : IDbOperationHelper<Long> {
+//                            override fun run(): Long {
+//                                return try {
+//                                    val response_id = db!!.surveyDao().saveOnlineResponseHeaders(
+//                                            Arrays.asList(*Gson().fromJson(response.getJSONArray("RESPONSES").toString(), Array<ResponseHeader>::class.java)))[0]
+//                                    db!!.surveyDao().saveOnlineResponseDetails(
+//                                            Arrays.asList(*Gson().fromJson(response.getJSONArray("RESPONSE_DETAILS").toString(), Array<ResponseDetail>::class.java)))
+//                                    val survey = db!!.surveyDao().getSurveyWithOnlineId(response.getJSONArray("RESPONSES").getJSONObject(0).getInt("SURVEY_ID"))
+//                                    response_id
+//                                } catch (e: JSONException) {
+//                                    throw RuntimeException(e)
+//                                }
+//                            }
+//
+//                            override fun onCompleted(response_id: Long) {
+//                                buildAndShowNotification(response_id)
+//                            }
+//                        })
                     } else {
                         //  Toast.makeText(getContext(),"An error occured",Toast.LENGTH_SHORT).show();
                         Log.e("ddd", response.toString())

@@ -8,52 +8,43 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.babajidemustapha.survey.R
 import com.example.babajidemustapha.survey.shared.models.Reactions
-import com.example.babajidemustapha.survey.shared.room.entities.Question
-import com.example.babajidemustapha.survey.shared.room.entities.ResponseDetail
 import com.example.babajidemustapha.survey.shared.views.QuestionView
-import com.google.gson.Gson
+import com.jide.surveyapp.model.Option
+import com.jide.surveyapp.model.ResponseDetail
+import com.jide.surveyapp.model.relations.QuestionWithOptionsAndResponse
 import kotlinx.android.synthetic.main.fragment_answer_question.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [AnswerQuestionFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [AnswerQuestionFragment.newInstance] factory method to
- * create an instance of this fragment.
- *
- */
+
 class AnswerQuestionFragment : Fragment(), QuestionView.OnResponseProvidedListener {
     override fun onReactionSelectResponse(reaction: Reactions) {
         val question = listener?.onQuestionSelected(questionIndex)
-        question?.questionResponse = ResponseDetail(question!!.id, reaction.name)
+        question?.responses = listOf(ResponseDetail(question!!.options.first().id, reaction.name))
         listener?.updateProgress()
     }
 
     override fun onTextResponse(response: String) {
         val question = listener?.onQuestionSelected(questionIndex)
-        question?.questionResponse = ResponseDetail(question!!.id, response)
+        question?.responses = listOf(ResponseDetail(question!!.options.first().id, response))
         listener?.updateProgress()
     }
 
     override fun onSingleOptionsResponse(response: Int) {
         val question = listener?.onQuestionSelected(questionIndex)
-        question?.questionResponse = ResponseDetail(question!!.id, question.options!![response])
+        question?.responses = listOf(ResponseDetail(question!!.options[response].id))
         listener?.updateProgress()
     }
 
     override fun onMultiSelectResponse(response: List<Int>) {
         val question = listener?.onQuestionSelected(questionIndex)
-        val responseTextList = mutableListOf<String>()
+        val responseTextList = mutableListOf<Option>()
         for (res in response) {
-            responseTextList.add(question!!.options!![res])
+            responseTextList.add(question!!.options[res])
         }
-        question?.questionResponse = ResponseDetail(question!!.id, if (responseTextList.isNullOrEmpty()) null else Gson().toJson(responseTextList))
+        question?.responses = responseTextList.map { ResponseDetail(it.id) }
         listener?.updateProgress()
     }
 
@@ -65,7 +56,6 @@ class AnswerQuestionFragment : Fragment(), QuestionView.OnResponseProvidedListen
         arguments?.let {
             questionIndex = it.getInt(ARG_PARAM1)
         }
-        //retainInstance = true
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -76,7 +66,7 @@ class AnswerQuestionFragment : Fragment(), QuestionView.OnResponseProvidedListen
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val questionView = QuestionView(context!!, QuestionView.VIEW_QUESTION, listener!!.onQuestionSelected(questionIndex), listener!!.getTotal(), this)
+        val questionView = QuestionView(requireContext(), QuestionView.VIEW_QUESTION, listener!!.onQuestionSelected(questionIndex), listener!!.getTotal(), this)
         rootView.addView(questionView)
     }
 
@@ -95,7 +85,7 @@ class AnswerQuestionFragment : Fragment(), QuestionView.OnResponseProvidedListen
     }
 
     interface OnQuestionSelectedInteractionListener {
-        fun onQuestionSelected(index: Int): Question
+        fun onQuestionSelected(index: Int): QuestionWithOptionsAndResponse
         fun getTotal(): Int
         fun updateProgress()
     }

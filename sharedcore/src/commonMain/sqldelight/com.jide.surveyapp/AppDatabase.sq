@@ -1,0 +1,94 @@
+import com.jide.surveyapp.model.QuestionType;
+import java.lang.Boolean;
+import java.lang.Integer;
+
+CREATE TABLE SurveyEntity (
+    id TEXT NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    description TEXT,
+    shared INTEGER AS Boolean NOT NULL,
+    backedUp INTEGER AS Boolean DEFAULT 0 NOT NULL,
+    dateCreated TEXT NOT NULL
+);
+
+CREATE TABLE QuestionEntity (
+    id TEXT NOT NULL PRIMARY KEY,
+    questionNo INTEGER AS Integer NOT NULL,
+    questionType TEXT AS QuestionType NOT NULL,
+    mandatory INTEGER AS Boolean NOT NULL,
+    questionText TEXT NOT NULL,
+    surveyId TEXT NOT NULL,
+    FOREIGN KEY(surveyId) REFERENCES SurveyEntity(id)
+);
+
+CREATE TABLE OptionEntity (
+    id TEXT NOT NULL PRIMARY KEY,
+    optionNo INTEGER AS Integer NOT NULL,
+    optionText TEXT,
+    questionId TEXT NOT NULL,
+    FOREIGN KEY(questionId) REFERENCES QuestionEntity(id)
+);
+
+CREATE TABLE ResponseHeaderEntity (
+    id TEXT NOT NULL PRIMARY KEY,
+    respondentName TEXT,
+    backedUp INTEGER AS Boolean DEFAULT 0 NOT NULL,
+    date TEXT NOT NULL,
+    surveyId TEXT NOT NULL,
+    FOREIGN KEY(surveyId) REFERENCES SurveyEntity(id)
+);
+
+CREATE TABLE ResponseDetailEntity (
+    id TEXT NOT NULL PRIMARY KEY,
+    responseHeaderId TEXT NOT NULL,
+    optionId TEXT NOT NULL,
+    freeTextResponse TEXT,
+    FOREIGN KEY (responseHeaderId) REFERENCES ResponseHeaderEntity(id),
+    FOREIGN KEY (optionId) REFERENCES OptionEntity(id)
+);
+
+insertSurvey:
+INSERT INTO SurveyEntity VALUES ?;
+
+insertQuestion:
+INSERT INTO QuestionEntity VALUES ?;
+
+insertOption:
+INSERT INTO OptionEntity VALUES ?;
+
+insertResponseHeader:
+INSERT INTO ResponseHeaderEntity VALUES ?;
+
+insertResponseDetail:
+INSERT INTO ResponseDetailEntity VALUES ?;
+
+getAllSurveys:
+SELECT * FROM SurveyEntity;
+
+filterSurveys:
+SELECT SurveyEntity.*, COUNT(ResponseHeaderEntity.id) AS responseCount FROM SurveyEntity
+LEFT JOIN ResponseHeaderEntity ON SurveyEntity.id = ResponseHeaderEntity.surveyId WHERE name LIKE '%' || :query || '%' OR  description LIKE '%' || :query || '%'
+GROUP BY SurveyEntity.id;
+
+getAllSurveysWithQuestions:
+SELECT * FROM SurveyEntity LEFT JOIN QuestionEntity ON SurveyEntity.id = QuestionEntity.surveyId;
+
+getAllSurveysWithResponseCount:
+SELECT SurveyEntity.*, COUNT(ResponseHeaderEntity.id) AS responseCount FROM SurveyEntity LEFT JOIN ResponseHeaderEntity ON SurveyEntity.id = ResponseHeaderEntity.surveyId GROUP BY SurveyEntity.id;
+
+getQuestionsWithSurveyId:
+SELECT * FROM QuestionEntity JOIN OptionEntity ON QuestionEntity.id = OptionEntity.questionId WHERE QuestionEntity.surveyId = :surveyId;
+
+getResponseHeaderWithSurveyId:
+SELECT * FROM ResponseHeaderEntity WHERE surveyId = ?;
+
+getResponseDetailWithHeaderId:
+SELECT *, OptionEntity.id AS optionMainId, QuestionEntity.id AS questionMainId, ResponseDetailEntity.id AS responseDetaildId FROM OptionEntity
+LEFT JOIN ResponseDetailEntity ON ResponseDetailEntity.optionId = OptionEntity.id
+JOIN QuestionEntity ON OptionEntity.questionId = QuestionEntity.id WHERE ResponseDetailEntity.responseHeaderId = ?;
+
+getReportWithSurveyId:
+SELECT *, OptionEntity.id AS optionMainId, QuestionEntity.id AS questionMainId, ResponseDetailEntity.id AS responseDetaildId FROM QuestionEntity
+LEFT JOIN OptionEntity ON QuestionEntity.id = OptionEntity.questionId
+LEFT JOIN ResponseDetailEntity ON OptionEntity.id = ResponseDetailEntity.optionId
+WHERE QuestionEntity.surveyId = ?;

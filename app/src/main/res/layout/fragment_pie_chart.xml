@@ -2,14 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.babajidemustapha.survey.features.Reports.fragments.PieChartFragment">
+    tools:context="com.example.babajidemustapha.survey.features.reports.fragments.PieChartFragment">
 
 
     <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/pieList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical">
+        android:id="@+id/pieList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical">
 
     </androidx.recyclerview.widget.RecyclerView>
 

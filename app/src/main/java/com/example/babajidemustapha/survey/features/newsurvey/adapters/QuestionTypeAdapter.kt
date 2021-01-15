@@ -7,7 +7,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.babajidemustapha.survey.R
-import com.example.babajidemustapha.survey.shared.models.QuestionType
+import com.example.babajidemustapha.survey.shared.utils.getDisplayName
+import com.example.babajidemustapha.survey.shared.utils.getImageResource
+import com.jide.surveyapp.model.QuestionType
 
 class QuestionTypeAdapter(private val questionTypes: List<QuestionType>, private val questionTypeInteractionListener: QuestionTypeInteractionListener)
     : RecyclerView.Adapter<QuestionTypeAdapter.ViewHolder>() {

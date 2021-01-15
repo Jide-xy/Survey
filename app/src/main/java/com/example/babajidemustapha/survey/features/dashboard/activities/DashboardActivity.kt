@@ -5,31 +5,25 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.android.volley.toolbox.JsonRequest
 import com.example.babajidemustapha.survey.R
 import com.example.babajidemustapha.survey.features.LoginActivity
 import com.example.babajidemustapha.survey.features.dashboard.fragments.SurveyList
 import com.example.babajidemustapha.survey.features.searchsurvey.fragments.SearchSurvey
-import com.example.babajidemustapha.survey.shared.room.db.SurveyDatabase
 import com.example.babajidemustapha.survey.shared.utils.SharedPreferenceHelper
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_dashboard.*
-import org.json.JSONObject
 
+@AndroidEntryPoint
 class DashboardActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener, SurveyList.OnNavigationMenuSelected {
     override fun setTitle(title: String?) {
 
     }
 
-    private lateinit var textMessage: TextView
-    lateinit var db: SurveyDatabase
     lateinit var user_data: SharedPreferences
-    lateinit var jsonObject: JSONObject
-    internal var syncRequest: JsonRequest<*>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +31,6 @@ class DashboardActivity : AppCompatActivity(), BottomNavigationView.OnNavigation
         setSupportActionBar(toolbar)
         user_data = getSharedPreferences("user_data", Context.MODE_PRIVATE)
         //toolbar.setTitle("My Surveys");
-        db = SurveyDatabase.getInstance(this)
         supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.container, SurveyList(), SurveyList.TAG)
@@ -81,7 +74,6 @@ class DashboardActivity : AppCompatActivity(), BottomNavigationView.OnNavigation
     private fun logout() {
 //        val user_token = user_data.getString("DEVICE_TOKEN", null)
 //        val editor = user_data.edit()
-        db.clearAllTables()
 //        editor.clear().apply()
 //        editor.putString("DEVICE_TOKEN", user_token).commit()
         val intent = Intent(this, LoginActivity::class.java)

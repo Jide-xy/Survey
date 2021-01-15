@@ -21,33 +21,27 @@ import androidx.fragment.app.Fragment
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.JsonRequest
-import com.android.volley.toolbox.Volley
 import com.example.babajidemustapha.survey.R
 import com.example.babajidemustapha.survey.features.LoginActivity
 import com.example.babajidemustapha.survey.features.dashboard.fragments.SurveyList
 import com.example.babajidemustapha.survey.features.dashboard.fragments.SurveyList.OnNavigationMenuSelected
 import com.example.babajidemustapha.survey.features.searchsurvey.fragments.SearchSurvey
-import com.example.babajidemustapha.survey.shared.models.SurveySyncRequest
-import com.example.babajidemustapha.survey.shared.room.db.SurveyDatabase
-import com.example.babajidemustapha.survey.shared.utils.DbOperationHelper
-import com.example.babajidemustapha.survey.shared.utils.DbOperationHelper.IDbOperationHelper
+
 import com.example.babajidemustapha.survey.shared.utils.SharedPreferenceHelper
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, OnNavigationMenuSelected {
-    var db: SurveyDatabase? = null
-    var drawer: DrawerLayout? = null
-    var user_data: SharedPreferences? = null
-    var username: TextView? = null
-    var email: TextView? = null
-    var progressDialog: ProgressDialog? = null
-    var framelayout: FrameLayout? = null
-    var jsonObject: JSONObject? = null
+    lateinit var drawer: DrawerLayout
+    lateinit var user_data: SharedPreferences
+    lateinit var username: TextView
+    lateinit var email: TextView
+    lateinit var progressDialog: ProgressDialog
+    lateinit var framelayout: FrameLayout
+    lateinit var jsonObject: JSONObject
     var syncRequest: JsonRequest<*>? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +51,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
         user_data = getSharedPreferences("user_data", MODE_PRIVATE)
         //toolbar.setTitle("My Surveys");
-        db = SurveyDatabase.Companion.getInstance(this)
         drawer = findViewById(R.id.drawer_layout)
         val toggle = ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
@@ -70,8 +63,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
         username = navigationView.getHeaderView(0).findViewById(R.id.username)
         email = navigationView.getHeaderView(0).findViewById(R.id.email)
-        username.setText(user_data.getString("USERNAME", "GUEST"))
-        email.setText(user_data.getString("EMAIL", ""))
+        username.text = user_data.getString("USERNAME", "GUEST")
+        email.text = user_data.getString("EMAIL", "")
         navigationView.setNavigationItemSelectedListener(this)
         if (SharedPreferenceHelper.isGuestUser(this)) {
             navigationView.menu.findItem(R.id.sync).isVisible = false
@@ -108,37 +101,37 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     fun trySync() {
         progressDialog = ProgressDialog(this)
-        progressDialog!!.isIndeterminate = true
-        progressDialog!!.setMessage("Syncing survey. Please wait...")
-        progressDialog!!.setCancelable(false)
-        progressDialog!!.show()
+        progressDialog.isIndeterminate = true
+        progressDialog.setMessage("Syncing survey. Please wait...")
+        progressDialog.setCancelable(false)
+        progressDialog.show()
         //            final JSONObject jsonObject;
-        DbOperationHelper.Companion.execute(object : IDbOperationHelper<SurveySyncRequest?> {
-            override fun run(): SurveySyncRequest? {
-                return db!!.surveyDao().dataToSync
-            }
-
-            override fun onCompleted(surveySyncRequest: SurveySyncRequest?) {
-                try {
-                    jsonObject = JSONObject(Gson().toJson(surveySyncRequest))
-                    syncRequest = sync()
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                }
-                if (syncRequest != null) {
-                    Volley.newRequestQueue(this@MainActivity).add<Any>(syncRequest)
-                }
-            }
-        })
+//        DbOperationHelper.Companion.execute(object : IDbOperationHelper<SurveySyncRequest?> {
+//            override fun run(): SurveySyncRequest? {
+//                return db!!.surveyDao().dataToSync
+//            }
+//
+//            override fun onCompleted(surveySyncRequest: SurveySyncRequest?) {
+//                try {
+//                    jsonObject = JSONObject(Gson().toJson(surveySyncRequest))
+//                    syncRequest = sync()
+//                } catch (e: JSONException) {
+//                    e.printStackTrace()
+//                }
+//                if (syncRequest != null) {
+//                    //Volley.newRequestQueue(this@MainActivity).add<SurveySyncRequest>(syncRequest)
+//                }
+//            }
+//        })
     }
 
     @Throws(JSONException::class)
     private fun sync(): JsonRequest<*>? {
-        jsonObject!!.put("USER_ID", user_data!!.getInt("USER_ID", 0))
+        jsonObject.put("USER_ID", user_data.getInt("USER_ID", 0))
         printlog(jsonObject)
-        if (jsonObject!!.optJSONArray("SURVEYS").length() == 0 && jsonObject!!.optJSONArray("SYNCED_SURVEY_RESPONSE").length() == 0) {
-            progressDialog!!.dismiss()
-            Snackbar.make(framelayout!!, "Backup up to date", Snackbar.LENGTH_SHORT).show()
+        if (jsonObject.optJSONArray("SURVEYS").length() == 0 && jsonObject.optJSONArray("SYNCED_SURVEY_RESPONSE").length() == 0) {
+            progressDialog.dismiss()
+            Snackbar.make(framelayout, "Backup up to date", Snackbar.LENGTH_SHORT).show()
         } else {
             //            syncRequest.setRetryPolicy(new RetryPolicy() {
 //                @Override
@@ -159,25 +152,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             return object : JsonObjectRequest(Method.POST, "http://survhey.azurewebsites.net/survey/sync", jsonObject, Response.Listener { response_ ->
                 try {
                     if (response_.getString("STATUS").equals("success", ignoreCase = true)) {
-                        progressDialog!!.setMessage("Sync successful. Updating...")
-                        DbOperationHelper.Companion.execute(object : IDbOperationHelper<Void?> {
-                            override fun run(): Void? {
-                                db!!.surveyDao().updateSyncedDataWithOnlineIds(
-                                        Gson().fromJson(response_.toString(), SurveySyncRequest::class.java))
-                                return null
-                            }
-
-                            override fun onCompleted(aVoid: Void?) {
-                                progressDialog!!.dismiss()
-                                Toast.makeText(this@MainActivity, "Sync successful", Toast.LENGTH_LONG).show()
-                            }
-                        })
+                        progressDialog.setMessage("Sync successful. Updating...")
+//                        DbOperationHelper.Companion.execute(object : IDbOperationHelper<Void?> {
+//                            override fun run(): Void? {
+//                                db!!.surveyDao().updateSyncedDataWithOnlineIds(
+//                                        Gson().fromJson(response_.toString(), SurveySyncRequest::class.java))
+//                                return null
+//                            }
+//
+//                            override fun onCompleted(aVoid: Void?) {
+//                                progressDialog!!.dismiss()
+//                                Toast.makeText(this@MainActivity, "Sync successful", Toast.LENGTH_LONG).show()
+//                            }
+//                        })
                     } else if (response_.getString("STATUS").equals("fail", ignoreCase = true)) {
-                        progressDialog!!.dismiss()
+                        progressDialog.dismiss()
                         Toast.makeText(this@MainActivity, "Sync unsuccessful", Toast.LENGTH_SHORT).show()
                         Log.e("ddd", response_.toString())
                     } else {
-                        progressDialog!!.dismiss()
+                        progressDialog.dismiss()
                         Toast.makeText(this@MainActivity, "An error occured", Toast.LENGTH_SHORT).show()
                         Log.e("ddd", response_.toString())
                     }
@@ -187,7 +180,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
                 Log.e("ddd", response_.toString())
             }, Response.ErrorListener { error ->
-                progressDialog!!.dismiss()
+                progressDialog.dismiss()
                 Toast.makeText(this@MainActivity, "Failed to connect", Toast.LENGTH_SHORT).show()
                 error.printStackTrace()
             }) {
@@ -240,14 +233,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (fragment != null) {
             supportFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
         }
-        drawer!!.closeDrawer(GravityCompat.START)
+        drawer.closeDrawer(GravityCompat.START)
         return true
     }
 
     private fun logout() {
-        val user_token = user_data!!.getString("DEVICE_TOKEN", null)
-        val editor = user_data!!.edit()
-        db!!.clearAllTables()
+        val user_token = user_data.getString("DEVICE_TOKEN", null)
+        val editor = user_data.edit()
         editor.clear().apply()
         editor.putString("DEVICE_TOKEN", user_token).commit()
         val intent = Intent(this, LoginActivity::class.java)
@@ -261,6 +253,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val query = intent.getStringExtra(SearchManager.QUERY)
             //use the query to search your data somehow
         }
+    }
+
+    override fun setTitle(title: String?) {
+
     }
 
 }
